@@ -2,40 +2,35 @@
     <% include ../head %>
 
     <% include ../header %>
-
-    <div class="col-md-9">
+    <div class="row">    
+            <div class="col-md-2"></div>
+    <div class="col-md-8">
         <br>
         <br>
         <br>
             
                 <div class="row"> 
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                             <select class="form-control" id="category">
-                                    <option>대분류</option>
-                                    <option>ios</option>
-                                    <option>nodejs</option>
-                                    <option>objective c</option>
-                                    <option>js</option>
+                                    <option>게시판선택</option>
+                                    <option>사진방</option>
+                                    <option>영상방</option>
+                                    <option>나눔방</option>
+                                    <option>공지사항</option>
                             </select>
                     </div><!-- /col-md-2 -->
 
-                    <div class="col-md-2">
-                            <select class="form-control" id="category">
-                                    <option>중분류</option>
-                                    <option>ios</option>
-                                    <option>nodejs</option>
-                                    <option>objective c</option>
-                                    <option>js</option>
-                            </select>
-                    </div><!-- /col-md-2 -->
+
 
                     <div class="col-md-6">
                     <input type="text" id = "title" class="form-control" aria-label="제목" placeholder="제목">
                     </div>
 
                     <div class="col-md-2">
-                            <label class="checkbox-inline"><input type="checkbox" value="">비공개</label>
+                            <label class="checkbox-inline"><input type="checkbox" value="">공지글</label>
                     </div><!-- /col-md-2 -->
+
+
 
                 </div><!-- row -->
             
@@ -46,16 +41,17 @@
 
             <br>
             <br>
+
+
             <div class="row">
-                <div class="text-center">
-                    <button type="button" class="btn btn-success btn-md text-center" onclick="showContent();">작성</button>
-                    
-                </div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"><button type="button" class="btn btn-success btn-lg text-center" onclick="showContent();">작성</button></div>
+                    <div class="col-md-3"></div>
             </div>
+            <br><br>
+
  
-            <div class="output"></div>
-
-
             <script>
             $('#summernote').summernote({
                 height: 400,                 // set editor height
@@ -67,7 +63,8 @@
 
 
     </div>
-
+    <div class="col-md-2"></div>
+</div>
 
     <% include ../footer %>
  
@@ -77,6 +74,3 @@
         }
     </script>
                  
-  </body>
-
-</html>
