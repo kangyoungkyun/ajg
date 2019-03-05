@@ -44,7 +44,6 @@ var storage = multer.diskStorage({
   }
 });
 
-
 //파일 업로드 모듈
 var upload = multer({ storage: storage });
 /* 대분류 저장 액션 */
@@ -64,32 +63,31 @@ router.post('/write/bigwritesaveimage', upload.single('fileupload') ,function (r
 
 /* 대분류 저장 액션 */
 router.post('/write/bigwritesave',function (req, res, next) {
-  loger.info('대분류 저장 진입  - /write/bigwritesave - write.js');
-  var section = req.body.sectiontext;
-  var fileurl = req.body.fileurl;
+  loger.info('게시판 제목 저장 진입  - /write/bigwritesave - write.js');
+
   var title = req.body.title;
   var mainclose = req.body.mainclose;
-  var pay = req.body.pay;
-  var close = req.body.close;
-  var price = req.body.price;
   var summernoteContent = req.body.summernoteContent;
-  var imagepath = req.body.imagepath;
 
+  loger.info(title);
+  loger.info(mainclose);
+  loger.info(summernoteContent);
 
-  var insertsql = 'insert into bigTbl (title,description,close,pay,mainclose,section,price,fileurl,image) values (?,?,?,?,?,?,?,?,?)';
-  var params = [title, summernoteContent, close, pay , mainclose, section, price,fileurl ,imagepath];
-  client.query(insertsql, params, function (err, rows, fields) {
-    if (err) {
-      loger.error('대분류 insert 쿼리에 오류가 있습니다. - /write/bigwritesave - write.js');
-      loger.error(err);
-    } else {
-      if(rows.insertId){
-        res.send({ result: 'success' , tocken:'저장성공'});
-      }else{
-        res.send({ result: 'fail' , tocken:'저장실패'});
-      }
-    }
-  });
+  // var insertsql = 'insert into bigTbl (title,description,close,pay,mainclose,section,price,fileurl,image) values (?,?,?,?,?,?,?,?,?)';
+  // var params = [title, summernoteContent, close, pay , mainclose, section, price,fileurl ,imagepath];
+  // client.query(insertsql, params, function (err, rows, fields) {
+  //   if (err) {
+  //     loger.error('대분류 insert 쿼리에 오류가 있습니다. - /write/bigwritesave - write.js');
+  //     loger.error(err);
+  //   } else {
+  //     if(rows.insertId){
+  //       res.send({ result: 'success' , tocken:'저장성공'});
+  //     }else{
+  //       res.send({ result: 'fail' , tocken:'저장실패'});
+  //     }
+  //   }
+  // });
+
 });
 
 
