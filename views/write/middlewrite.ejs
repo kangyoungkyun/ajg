@@ -1,0 +1,73 @@
+
+    <% include ../head %>
+
+    <% include ../header %>
+
+    <div class="col-md-9">
+        <br>
+        <br>
+        <br>
+            
+                <div class="row"> 
+                    <div class="col-md-2">
+                            <select class="form-control" id="category">
+                                    <option>대분류</option>
+                                    <option>ios</option>
+                                    <option>nodejs</option>
+                                    <option>objective c</option>
+                                    <option>js</option>
+                            </select>
+                    </div><!-- /col-md-2 -->
+
+
+                    <div class="col-md-8">
+                    <input type="text" id = "title" class="form-control" aria-label="중분류 제목" placeholder="중분류 제목">
+                    </div>
+
+                    <div class="col-md-2">
+                            <label class="checkbox-inline"><input type="checkbox" value="">비공개</label>
+                    </div><!-- /col-md-2 -->
+
+                </div><!-- row -->
+            
+            
+            <br>
+
+            <div id="summernote"></div>
+
+            <br>
+            <br>
+            <div class="row">
+                <div class="text-center">
+                    <button type="button" class="btn btn-success btn-md text-center" onclick="showContent();">작성</button>
+                    
+                </div>
+            </div>
+ 
+            <div class="output"></div>
+
+
+            <script>
+            $('#summernote').summernote({
+                height: 400,                 // set editor height
+                minHeight: null,             // set minimum height of editor
+                maxHeight: null,             // set maximum height of editor
+                focus: true                  // set focus to editable area after initializing summernote
+            });
+            </script>
+
+
+    </div>
+
+
+    <% include ../footer %>
+ 
+    <script>
+        function showContent() {
+            $('.output').html($('#summernote').summernote('code'));
+        }
+    </script>
+                 
+  </body>
+
+</html>

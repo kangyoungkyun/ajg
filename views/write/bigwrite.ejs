@@ -1,0 +1,195 @@
+
+    <% include ../head %>
+
+    <% include ../header %>
+
+    <div class="col-md-9">
+        <br>
+        <br>
+        <br>
+                <div class="row"> 
+                    <div class="col-md-2">
+                            <select class="form-control" id="section">
+                                    <option>분류</option>
+                                    <option>영상</option>
+                                    <option>글</option>
+                            </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="checkbox-inline"><input type="checkbox" value="" id="mainclose">메인비게시</label>
+                    </div><!-- /col-md-2 -->
+                    
+                    <div class="col-md-4">
+                            <input type="text" id = "fileurl" class="form-control" placeholder="파일url" value="#">
+                    </div><!-- /col-md-4 -->
+
+                    <div class="col-md-4">
+                            <form method="post" enctype="multipart/form-data" id = "imageform">
+                                  <input type="file" class="form-control-file" id="fileupload" name="fileupload">
+                            </form>
+                    </div><!-- /col-md-4 -->
+
+                </div>
+                <br>
+
+                <div class="row"> 
+                    <div class="col-md-6">
+                        <input type="text" id = "title" class="form-control" placeholder="대분류 제목">
+                    </div>
+
+                    <div class="col-md-2">
+                            <label class="checkbox-inline"><input type="checkbox" value="" id="close">비공개</label>
+                    </div><!-- /col-md-2 -->
+
+                    <div class="col-md-2">
+                            <label class="checkbox-inline"><input type="checkbox" value="" id="pay">유료</label>
+                    </div><!-- /col-md-2 -->
+
+                    <div class="col-md-2">
+                            <input type="text"  class="form-control" placeholder="가격" id = "price" value = '0' readonly>
+                    </div><!-- /col-md-2 -->
+
+                </div><!-- row -->
+            
+            
+            <br>
+
+            <div id="summernote">#설명 : <br><br> #학습대상 : <br><br> #학습목표 : <br><br> #레벨: <br><br></div>
+
+            <br>
+            <br>
+            <div class="row">
+                <div class="text-center">
+                    <button type="button" class="btn btn-success btn-md text-center"  id = "saveBtn">작성</button>
+                    
+                </div>
+            </div>
+ 
+            <!-- <div class="output"></div> -->
+
+
+            <script>
+            $('#summernote').summernote({
+                height: 400,                 // set editor height
+                minHeight: null,             // set minimum height of editor
+                maxHeight: null,             // set maximum height of editor
+                focus: true                  // set focus to editable area after initializing summernote
+            });
+            </script>
+
+
+    </div>
+
+
+    <% include ../footer %>
+ 
+    <script>
+ $(document).ready(function(){
+    //저장버튼 클릭
+    $(document).on('click', '#saveBtn', function () {
+        //파일업로드 사진 유무 확인
+        var fileupload = $("#fileupload").val();      
+        if(fileupload == null || fileupload == undefined || fileupload == ''){
+            alert("사진을 확인해주세요.");
+        }else{
+            saveImage();
+        }        
+      });
+ });
+
+    //이미지 저장
+    function saveImage() {
+
+
+        var formData = new FormData($('#imageform')[0]);
+        $.ajax({
+            url: '/write/bigwritesaveimage',
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: formData,
+            async : false,
+            success: function (data) {
+                if (data['result'] == 'success') {
+                    console.log('사진업로드!성공!');
+                    var imagepath = data['path'];
+                    
+                    //이미지 패스 넘겨주기
+                    saveContent(imagepath);
+                }
+            },
+            error: function (jqXHR, textStatus, err) {
+                //show error message
+                alert('죄송합니다. 작업중 오류가 발생했습니다.' + "상태 : " + textStatus + ', error : ' + err);
+            }
+        });
+    }
+
+    //데이터 저장
+    function saveContent(imagepath) {
+        //값 가져오기
+        var langSelect = document.getElementById("section");               //분류
+        //var sectionvalue = langSelect.options[langSelect.selectedIndex].value;
+        var sectiontext = langSelect.options[langSelect.selectedIndex].text;
+        var fileurl = $("#fileurl").val();                                  //파일url
+        var title = $("#title").val();                                      //제목
+        var mainclose = $("#mainclose").is(":checked");                     //메인비공개
+        var close = $("#close").is(":checked");                             //비공개
+        var pay = $("#pay").is(":checked");                                 //유료
+        var price = $("#price").val();                                       //가격
+        var summernoteContent = $('#summernote').summernote('code');         //썸머노트(설명)
+        var imagepath = imagepath;
+        var chkresult = checkContent(sectiontext, fileurl, title);
+
+        //유효성 검사가 완료되었으면
+        if (chkresult) {
+            $.ajax({
+                url: '/write/bigwritesave',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                    sectiontext: sectiontext,
+                    fileurl: fileurl,
+                    title: title,
+                    mainclose: mainclose,
+                    close: close,
+                    pay: pay,
+                    price: price,
+                    summernoteContent: summernoteContent,
+                    imagepath:imagepath
+                },
+                success: function (data) {
+                    if (data['result'] == 'success') {
+                        alert(data['tocken']);
+                        location.reload();
+                    }else if(data['result'] == 'fail'){
+                        alert(data['tocken']);
+                    }
+                },
+                error: function (jqXHR, textStatus, err) {
+                    //show error message
+                    alert('죄송합니다. 작업중 오류가 발생했습니다.' + "상태 : " + textStatus + ', error : ' + err);
+                }
+            });
+        }
+    }
+
+    //유효성 체크 -  유효성 검사가 완료되면 true를 리턴한다.
+    function checkContent(sectiontext, fileurl, title) {
+        if (sectiontext == '분류') {
+            alert('분류를 선택해주세요.');
+            return false;
+        }
+
+        if (title == null || title == '' || title == undefined) {
+            alert('대분류 제목을 작성해주세요.');
+            return false;
+        }
+        return true;
+    }
+    </script>
+                 
+  </body>
+
+</html>
