@@ -28,7 +28,11 @@
                   <a class="nav-link" href="/read/readgallery">갤러리</a>
               </li>
               <li class="nav-item">
+                  <%if (whoami != undefined) { %>
+                  <a class="nav-link" href="/login/logout">로그아웃</a>
+                  <% } else{ %>
                   <a class="nav-link" href="/login/login">로그인</a>
+                  <% } %>
               </li>
           </ul>
         </div>

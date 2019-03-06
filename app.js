@@ -49,8 +49,38 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {
 loger.info("공통페이지 진입 - app.js");
   
-  var sessionID = req.sessionID;                                  // 세션 ID
-  loger.info("세션 아이디 : " + sessionID);
+  //var sessionID = req.sessionID;                                  // 세션 ID
+  //loger.info("세션 아이디 : " + sessionID);
+
+    //로그인한 유저
+    if(req.session.nickname){
+      //로그인 한 유저의 닉네임을 로컬에서도 사용할 수 있게 설정
+      res.locals.email = req.session.authId;
+      res.locals.whoami = req.session.nickname;
+      // 방문 횟수 - visitCnt 키가 존재하면 +1, 존재하지 않으면 1로 초기화
+      // if (req.session.visitCnt)
+      //   req.session.visitCnt = parseInt(req.session.visitCnt) + 1;
+      // else
+      //   req.session.visitCnt = 1;
+  
+      // 마지막 방문 날짜 - 현재날짜 지장
+      // var now = new Date();
+      // var last = now.getFullYear() + '.' + (now.getMonth() + 1) + '.' + now.getDate();
+      // req.session.lastDay = last;
+  
+      // 첫 방문 날짜 - firstDay 키가 존재하지 않으면 오늘날짜로 지정
+      // if (!req.session.firstDay) {
+      //   req.session.firstDay = last;
+      // }
+      //loger.info('로그인 된 닉네임 : ' + req.session.nickname + " - app.js");
+      //loger.info('visitCnt : ', req.session.visitCnt + " - app.js");  //횟수
+      //loger.info('lastDay : ', req.session.lastDay + " - app.js");   //마지막 방문날
+     // loger.info('firstDay : ', req.session.firstDay + " - app.js");  //첫번째 방문날
+    }
+    else{
+      res.locals.whoami = undefined;
+      res.locals.email = undefined;
+    }
 
 next();
 });

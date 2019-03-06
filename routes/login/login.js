@@ -86,6 +86,15 @@ router.post('/login/usersignup', function (req, res, next) {
 });
 
 
+/* 로그아웃  page. */
+router.get('/login/logout', function (req, res, next) {
+  req.session.destroy(function () {
+    res.locals.whoami = undefined;
+    res.locals.email = undefined;
+    res.render('login/login');
+  });
+});
+
 
 // /* 로그인 post action. */
 // router.post('/login/loginup', function (req, res, next) {
@@ -145,17 +154,7 @@ router.post('/login/usersignup', function (req, res, next) {
 //     });
 // });
 
-// /* 로그아웃  page. */
-// router.get('/login/logout', function (req, res, next) {
-//   req.session.destroy(function () {
-//     res.locals.whoami = undefined;
-//     res.locals.email = undefined;
-//     res.locals.churchname = undefined;
-//     res.render('login/login', {
-//       title: "주보사랑-로그인",
-//     })
-//   });
-// });
+
 
 
 
