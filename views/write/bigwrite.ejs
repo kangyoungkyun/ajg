@@ -15,7 +15,7 @@
                         <input type="text" id = "title" class="form-control" placeholder="게시판 제목">
                     </div>
                     <div class="col-md-2">
-                            <label class="checkbox-inline"><input type="checkbox" value="" id="mainclose">메인비게시</label>
+                            <label class="checkbox-inline"><input type="checkbox" value="" id="close">비공개</label>
                     </div><!-- /col-md-2 -->
                     <div class="col-md-2">
                             <label class="checkbox-inline"><input type="checkbox" value="" id="album">앨범게시판</label>
@@ -67,8 +67,9 @@
     function saveContent() {
         //값 가져오기
         var title = $("#title").val();                                      //제목
-        var mainclose = $("#mainclose").is(":checked");                     //메인비공개
-        var summernoteContent = $('#summernote').summernote('code');         //썸머노트(설명)
+        var close = $("#close").is(":checked");                             //비공개
+        var album = $("#album").is(":checked");                             //앨범게시판 여부
+        var summernoteContent = $('#summernote').summernote('code');        //썸머노트(설명)
         var chkresult = checkContent(title);
 
         //유효성 검사가 완료되었으면
@@ -79,7 +80,8 @@
                 type: 'post',
                 data: {
                     title: title,
-                    mainclose: mainclose,
+                    close: close,
+                    album:album,
                     summernoteContent: summernoteContent
                 },
                 success: function (data) {
