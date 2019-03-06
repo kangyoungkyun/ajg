@@ -1,0 +1,128 @@
+
+    <% include ../head %>
+
+    <% include ../header %>
+<br><br><br>
+        <div class="row"> 
+                <div class="col-md-2"></div>
+
+                <div class="col-md-8">
+                        <h2 class="page-header">로그인</h2>
+                        <form class="form-signin">
+                                <div class="text-center mb-4">
+                
+                               </div> 
+                         
+                               <!-- <div class="text-right">
+                                   <label>
+                                       <a href="/login/idpwfind" style="font-size: 12.5px; color:black;">*비밀번호를 잊으셨나요?</a>
+                                   </label>
+                               </div> -->
+                               <br>
+                
+                               <div class="form-label-group">
+                                 <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                               </div>
+                               <br>
+
+
+                               <div class="form-label-group">
+                                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                               </div>
+                               <br>
+                
+                               
+                               <input type="button" class="btn btn-lg btn-default btn-block" id="submitbtn" value="로그인">
+                               <br><br>
+                               <p class="mt-5 mb-3 text-muted text-center"><a href="/login/usersign">처음 방문하셨나요?</a></p>
+                               <br><br>
+                             </form>
+                </div>
+
+
+
+                <div class="col-md-2"></div>
+
+        </div>
+
+
+
+    <% include ../footer %>
+ 
+    <script>
+        $(document).ready(function () {
+         
+
+          $('#submitbtn').on('click', function () {
+
+            var email = $("#inputEmail").val();
+            var pwd = $("#inputPassword").val();
+
+            //비밀번호 유효성 체크
+            var chkresult = chkPwd(email, pwd);
+            //유효성 검사가 완료되었으면
+            if (chkresult) {
+              $.ajax({
+                url: '/login/loginup',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                  email: email,
+                  pwd: pwd
+                },
+                success: function (data) {
+
+                  if (data['result'] == 'success') {
+                    location.replace('/');
+
+                  } else if (data['result'] == 'idfail') {
+                    alert(data['tocken']);
+                    $("#inputEmail").val('');
+                    $("#inputPassword").val('');
+                    return false;
+
+                  } else if (data['result'] == 'pwfail') {
+                    alert(data['tocken']);
+                    $("#inputPassword").val('');
+                    return false;
+                  }
+
+                },
+                error: function (jqXHR, textStatus, err) {
+                  //show error message
+                  alert('죄송합니다. 작업중 오류가 발생했습니다.' + "상태 : " + textStatus + ', error : ' + err);
+                }
+              });
+            }
+          });
+
+
+          //유효성 체크
+          function chkPwd(email, pwd) {
+
+            if (email == null || email == '' || email == undefined) {
+              alert("이메일을 입력해주세요.");
+              $("#inputEmail").focus();
+              return false;
+            }
+
+            var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
+            if (exptext.test(email) == false) {
+              //이메일 형식이 알파벳+숫자@알파벳+숫자.알파벳+숫자 형식이 아닐경우			
+              alert("이메일 형식이 올바르지 않습니다.");
+              $("#inputEmail").focus();
+              return false;
+            }
+
+            if (pwd == null || pwd == '' || pwd == undefined) {
+              alert("비밀번호를 입력해주세요.");
+              $("#inputPassword").focus();
+              return false;
+            }
+
+            return true;
+          }
+        });
+</script>
+                 

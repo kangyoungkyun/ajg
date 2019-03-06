@@ -12,7 +12,7 @@ router.get('/write/bigwrite', function (req, res, next) {
 
 
 
-/* 소분류 글쓰기 페이지 */
+/* 글쓰기 페이지 */
 router.get('/write/write', function (req, res, next) {
   res.render('write/write');
 });

@@ -11,25 +11,25 @@ var loger = require('./logmodule.js');            //로그모듈
 var app = express(); 
 
 
-// var options = {                                         //session을 mysql db에 저장시키기위한 옵션
-//   host	: 'localhost',
-//   port	: 3306,
-//   user	: 'root',
-//   password: 'eorn1145',		                              //데이터베이스 접근 비밀번호
-//   database: 'mydb2'		                                  //데이터베이스의 이름
-//   };
+var options = {                                         //session을 mysql db에 저장시키기위한 옵션
+  host	: 'localhost',
+  port	: 3306,
+  user	: 'root',
+  password: 'eorn1145',		                              //데이터베이스 접근 비밀번호
+  database: 'mydb3'		                                  //데이터베이스의 이름
+  };
   
-//   var sessionStore = new MySQLStore(options);           //mysql session을 저장하기 위한 서버
-//   //미들웨어에 셋팅.
-//   app.use(session({
-//     cookie: {
-//       maxAge: 2400000 * 60 * 60 // 쿠키 유효기간 2400시간
-//     },
-//   secret : '1year1billion!!',
-//   resave: true,
-//   saveUninitialized: true,
-//   store: sessionStore
-//   }));
+  var sessionStore = new MySQLStore(options);           //mysql session을 저장하기 위한 서버
+  //미들웨어에 셋팅.
+  app.use(session({
+    cookie: {
+      maxAge: 2400000 * 60 * 60 // 쿠키 유효기간 2400시간
+    },
+  secret : '1year1billion!!',
+  resave: true,
+  saveUninitialized: true,
+  store: sessionStore
+  }));
 
 
 // 서버를 설정한다.
@@ -59,11 +59,14 @@ next();
 var indexRouter = require('./routes/index'); 
 var writeRouter = require('./routes/write/write');    //글쓰기 /routes폴더 / write 폴더 / write.js
 var readRouter = require('./routes/read/read');       //글읽기 /routes폴더 / read 폴더 / read.js
+var loginRouter = require('./routes/login/login');        //글읽기 /routes폴더 / login 폴더 / login.js
+
 
 //session을 사용할 라우터 셋팅
 app.use(indexRouter);
 app.use(writeRouter);
 app.use(readRouter);
+app.use(loginRouter);
 
 
 //라우터 미들웨어를 설정한다.
@@ -71,6 +74,7 @@ app.use('/', indexRouter);
 //write으로 들어오는 url 은 위의 writeRouter에서 처리
 app.use('/write', writeRouter);
 app.use('/read', readRouter);
+app.use('/login', loginRouter);
 
 
 

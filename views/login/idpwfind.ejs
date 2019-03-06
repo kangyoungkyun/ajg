@@ -1,0 +1,53 @@
+
+    <% include ../head %>
+
+    <% include ../header %>
+
+    <div class="col-md-9">
+        <div class="row"> 
+
+                <div class="col-md-2"></div>
+
+
+                <div class="col-md-8">
+                    <h2 class="page-header">비밀번호안내</h2>
+                        <form class="form-signin">
+                            <div class="text-center mb-4">
+                              
+                             <p class="text-center">가입시 작성한 <code>이메일 주소</code> 를 입력해주세요.<br>새로운 비밀번호를 보내드립니다.</p>
+                             <div class="alert alert-light alert-dismissible fade show" role="alert"> 
+                                 <span id = "alerttext"></span>
+                                 <button type="button" class="close" data-dismiss="alert2" id="alertclose" aria-label="Close">
+                                   <span aria-hidden="true">&times;</span>
+                                 </button>
+                             </div>
+                           </div> 
+                     
+                           <div class="form-label-group">
+                             <input type="email" id="inputEmail" class="form-control" placeholder="이메일을 입력해주세요." required autofocus>
+                           </div>
+                            <br>
+
+                           <input type="button" class="btn btn-lg btn-default btn-block" id="submitbtn" value="비밀번호 전송">
+                           <br>
+                         
+                        </form>
+                </div>
+
+
+
+                <div class="col-md-2"></div>
+
+
+        </div>
+    </div>
+
+
+    <% include ../footer %>
+ 
+    <script>
+        $(document).ready(function () {
+         
+        });
+</script>
+                 

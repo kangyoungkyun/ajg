@@ -1,6 +1,4 @@
 
-
-
 //mysql 모듈
 var mysql = require('mysql');
 
@@ -11,7 +9,7 @@ var client = mysql.createConnection({
   host: "localhost",
   user:'root',
   password:'eorn1145',
-  database:'mydb2',
+  database:'mydb3',
   dateStrings: 'date'
 });
 

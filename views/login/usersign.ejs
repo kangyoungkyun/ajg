@@ -1,0 +1,196 @@
+
+    <% include ../head %>
+
+    <% include ../header %>
+<br><br><br>
+    <div class="col-md-12">
+        <div class="row"> 
+
+                <div class="col-md-2"></div>
+
+
+                <div class="col-md-8">
+                    <h2 class="page-header">가입</h2>
+                      <form class="form-signin">
+                    
+                          <div class="text-center mb-4">
+                      
+                            <div class="alert alert-light alert-dismissible fade show" role="alert">
+                              <span id="alerttext"></span>
+                              <button type="button" class="close" data-dismiss="alert2" id="alertclose" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                          </div>
+                      
+                          <div class="text-center mb-4">
+                          </div>
+                      
+
+                          <div class="form-label-group">
+                            <input type="text" id="inputNickName" class="form-control" name="nickname" placeholder="닉네임" required
+                              autofocus>
+                          </div><br>
+                      
+                      
+                          <div class="form-label-group">
+                            <input type="email" id="inputEmail" class="form-control" name="email" placeholder="Email" required autofocus>
+                          </div><br>
+                      
+                      
+                          <div class="form-label-group">
+                            <input type="password" id="inputPassword" class="form-control" name="pwd" placeholder="비밀번호" required>
+                          </div><br>
+                      
+                      
+                          <div class="form-label-group">
+                            <input type="password" id="inputPasswordCheck" class="form-control" name="pwdcheck" placeholder="비밀번호확인" required>
+                          </div><br>
+
+                          <input type="button" class="btn btn-lg btn-default btn-block" id="submitbtn" value="가입하기">
+                          <br>
+                      
+                  </div>
+                      </div>
+              
+
+                    </form>
+              </div>
+
+                <div class="col-md-2"></div>
+
+        </div>
+    </div>
+
+
+    <% include ../footer %>
+ 
+    <script>
+        $(document).ready(function () {
+
+
+          $(".alert").css('display', 'none');
+          $("#alertclose").on('click', function () {
+            $(".alert").css('display', 'none');
+          });
+
+          //전송
+          $('#submitbtn').on('click', function () {
+            //입력한 데이터 가져오기
+            var nickname = $("#inputNickName").val();
+            var email = $("#inputEmail").val();
+            var pwd = $("#inputPassword").val();
+            var pwdcheck = $("#inputPasswordCheck").val();
+
+            //비밀번호 유효성 체크
+            var chkresult = chkPwd(nickname, email, pwd, pwdcheck);
+
+            //유효성 검사가 완료되었으면
+            if (chkresult) {
+              $.ajax({
+                url: '/login/usersignup',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                  nickname: nickname,
+                  email: email,
+                  pwd: pwd,
+                  pwdcheck: pwdcheck
+
+                },
+                success: function (data) {
+                  
+                  if (data['result'] == 'success') {
+                    location.replace('/');
+                  } else if (data['result'] == 'nicknamefail') {
+                    alert(data['tocken']);
+                    $("#inputNickName").val('');
+
+                  } else if (data['result'] == 'emailfail') {
+                    alert(data['tocken']);
+                    $("#inputEmail").val('');
+
+                  } else if (data['result'] == 'fail') {
+                    alert(data['tocken']);
+                    location.href = '/login/usersign';
+                  }
+                },
+                error: function (jqXHR, textStatus, err) {
+                  //show error message
+                  alert('죄송합니다. 작업중 오류가 발생했습니다.' + "상태 : " + textStatus + ', error : ' + err);
+                }
+              });
+            }
+          });          
+
+          //비밀번호 유효성 체크 -  유효성 검사가 완료되면 true를 리턴한다.
+          function chkPwd(nickname, email, pwd, pwdcheck) {
+
+            if (nickname == null || nickname == '' || nickname == undefined) {
+              alert("닉네임을 입력해주세요.");
+              $("#inputNickName").focus();
+              return false;
+            }
+
+            if (email == null || email == '' || email == undefined) {
+              alert("이메일을 입력해주세요.");
+              $("#inputEmail").focus();
+              return false;
+            }
+
+            var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
+            if (exptext.test(email) == false) {
+              //이메일 형식이 알파벳+숫자@알파벳+숫자.알파벳+숫자 형식이 아닐경우			
+              alert("이메일 형식이 올바르지 않습니다.");
+              $("#inputEmail").focus();
+
+              return false;
+            }
+
+            if (pwd == null || pwd == '' || pwd == undefined) {
+              alert("빈칸을 입력해주세요.");
+              $("#inputPassword").focus();
+              return false;
+            }
+
+            if (pwdcheck == null || pwdcheck == '' || pwdcheck == undefined) {
+              alert("빈칸을 입력해주세요.");
+              $("#inputPasswordCheck").focus();
+              return false;
+            }
+
+            if (pwd != pwdcheck) {
+              //비밀번호가 같지 않습니다.
+              alert("비밀번호가 같지 않습니다.");
+              $("#inputPassword").val('');
+              $("#inputPasswordCheck").val('');
+              $("#inputPassword").focus();
+              return false;
+            }
+
+
+            if (!/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/.test(pwd)) {
+              alert("숫자+영문자+특수문자 조합으로 8자리 이상 사용해야 합니다.");
+              $("#inputPassword").val('');
+              $("#inputPasswordCheck").val('');
+              $("#inputPassword").focus();
+              return false;
+            }
+            var checkNumber = pwd.search(/[0-9]/g);
+            var checkEnglish = pwd.search(/[a-z]/ig);
+            if (checkNumber < 0 || checkEnglish < 0) {
+              alert("숫자와 영문자를 혼용하여야 합니다.");
+              $("#inputPassword").val('');
+              $("#inputPasswordCheck").val('');
+              $("#inputPassword").focus();
+              return false;
+            }
+
+            return true;
+          }
+
+         
+        });
+</script>
+                 
