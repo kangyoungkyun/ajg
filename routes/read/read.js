@@ -6,13 +6,18 @@ loger.info("메모리 로딩 시작. - read.js");
 
 
 /* 중분류 보기 */
-router.get('/read/readmiddle', function (req, res, next) {
+router.get('/read/readbig', function (req, res, next) {
 
-  res.render('read/readmiddle');
+  res.render('read/readbig');
 
 });
 
+/* 갤러리 보기 */
+router.get('/read/readgallery', function (req, res, next) {
 
+  res.render('read/readgallery');
+
+});
 
 /* 포스트 보기 */
 router.get('/read/readpost', function (req, res, next) {
