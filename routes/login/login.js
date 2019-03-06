@@ -97,62 +97,44 @@ router.get('/login/logout', function (req, res, next) {
 
 
 // /* 로그인 post action. */
-// router.post('/login/loginup', function (req, res, next) {
+router.post('/login/loginup', function (req, res, next) {
 
-//   var email = req.body.email;
-//   var pwd = req.body.pwd;
+  var email = req.body.email;
+  var pwd = req.body.pwd;
 
-//   client.query('SELECT ??, ??, ??, ??,?? FROM ?? WHERE ?? = ?',
-//     ['id','churchTbl_num','nickname', 'pw', 'salt', 'userTbl', 'id', email], function (err, rows, results) {
+  client.query('SELECT  ??, ??, ??,?? FROM ?? WHERE ?? = ?',
+    ['id','nickname', 'pw', 'salt', 'userTbl', 'id', email], function (err, rows, results) {
 
-//       if (err) {
-//         loger.error('로그인 쿼리 문장에 오류가 있습니다. - login.js - /login/loginup');
-//         loger.error(err);
-//       } else {
-//         if (rows.length > 0) {
-//           //아이디가 존재할 경우
-//           crypto.pbkdf2(pwd, rows[0].salt, 106636, 64, 'sha512', function (err, key) {
-//             if (key.toString('base64') === rows[0].pw) {
+      if (err) {
+        loger.error('로그인 쿼리 문장에 오류가 있습니다. - login.js - /login/loginup');
+        loger.error(err);
+      } else {
+        if (rows.length > 0) {
+          //아이디가 존재할 경우
+          crypto.pbkdf2(pwd, rows[0].salt, 106636, 64, 'sha512', function (err, key) {
+            if (key.toString('base64') === rows[0].pw) {
 
+                      //로그인 성공 : 사용자 nickname을 세션 데이터로 저장
+                      req.session.authId = rows[0].id;
+                      req.session.nickname = rows[0].nickname;
+                      req.session.save(function () {
+                        res.send({ result: 'success', tocken: '로그인 성공' });
+                      });
 
-//               var churchnum = rows[0].churchTbl_num;
-//               var sql = 'select * from churchTbl where num = ?';
-//               client.query(sql,[churchnum], function (err, rows2, results) {
-//                 if(err){
-//                   loger.error('로그인 교회 pk 가져오는 문장에 오류가 있습니다. - login.js - /login/loginup');
-//                   loger.error(err);
-//                 }else{
-//                     if(rows2.length > 0){
-//                       var churchname = rows2[0].churchname;
-//                       //로그인 성공 : 사용자 nickname을 세션 데이터로 저장
-
-//                       req.session.authId = rows[0].id;
-//                       req.session.nickname = rows[0].nickname;
-//                       req.session.churchname = churchname
-//                       req.session.save(function () {
-//                         res.send({ result: 'success', tocken: '로그인 성공' });
-//                       });
-
-//                     }
-//                 }
-
-//               });
-
-
-//             } else {
-//               //비밀번호가 틀릴경우
-//               res.send({ result: 'pwfail', tocken: '비밀번호를 확인해주세요.' });
+            } else {
+              //비밀번호가 틀릴경우
+              res.send({ result: 'pwfail', tocken: '비밀번호를 확인해주세요.' });
               
-//             }
-//           });
-//         } else {
-//           //아이디가 존재하지 않을경우
-//           res.send({ result: 'idfail', tocken: '존재하지 않는 아이디입니다.' });
+            }
+          });
+        } else {
+          //아이디가 존재하지 않을경우
+          res.send({ result: 'idfail', tocken: '존재하지 않는 아이디입니다.' });
           
-//         }
-//       }
-//     });
-// });
+        }
+      }
+    });
+});
 
 
 
