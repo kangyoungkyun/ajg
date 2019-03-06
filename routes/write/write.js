@@ -14,7 +14,20 @@ router.get('/write/bigwrite', function (req, res, next) {
 
 /* 글쓰기 페이지 */
 router.get('/write/write', function (req, res, next) {
-  res.render('write/write');
+
+  // 글쓰기에서 게시판 셀렉트 박스 선택 위한 조회 쿼리
+  var sql = 'select * from bigTbl';
+  client.query(sql, function (err, selectrows, results) {
+    if (err) {
+      loger.error(err);
+      return;
+    } else {
+      res.render('write/write', {
+        selectrows: selectrows
+      });
+    }
+  }); 
+
 });
 
 
@@ -69,9 +82,6 @@ router.post('/write/bigwritesave',function (req, res, next) {
   var summernoteContent = req.body.summernoteContent;
   var album = req.body.album;
   
-  loger.info(title);
-  loger.info(close);
-  loger.info(summernoteContent);
 
   var insertsql = 'insert into bigTbl (title,description,close,album) values (?,?,?,?)';
   var params = [title, summernoteContent, close,album];
@@ -89,6 +99,68 @@ router.post('/write/bigwritesave',function (req, res, next) {
   });
 
 });
+
+
+//나의 포스터 저장 액션!
+router.post('/write/writepostsave', function (req, res, next) {
+  loger.info('나의 포스터 저장 진입  - /write/writepostsave - write.js');
+
+  var posttitle = req.body.posttitle;                                                          
+  var notice = req.body.notice;                                                  
+  var bignum = req.body.bignum;         
+  var summernoteContent = req.body.summernoteContent;      
+  var author = req.session.nickname;                    //로그인한 유저 세션 체크 + 이름가져오기
+  var authId = req.session.authId;
+  
+
+  if(author == null || author == undefined || authId == null || authId == undefined){
+    res.send({ result: 'fail' , tocken:'로그인해주세요'});
+    return;
+  }else{
+
+    loger.info(posttitle);  
+    loger.info(notice);      //false
+    loger.info(bignum);  //1
+    loger.info(summernoteContent);
+  
+    //유저 키 조회
+    client.query('SELECT ?? FROM ?? WHERE ?? = ?',
+      ['usernum', 'userTbl', 'id', authId], function (err, rows, results) {
+
+        if (err) {
+          loger.error('userkey 조회 쿼리 문장에 오류가 있습니다. - write.js - /write/writepostsave');
+          loger.error(err);
+        } else {
+
+          var usernum = rows[0]['usernum'];
+
+          var insertsql = 'insert into postTbl (bignum,usernum, title,description,notice,author,cnt) values (?,?,?,?,?,?,?)';
+          var params = [bignum,usernum,posttitle,summernoteContent,notice,author,'0'];
+          client.query(insertsql, params, function (err, rows, fields) {
+            if (err) {
+              loger.error('post insert 쿼리에 오류가 있습니다. - /write/writepostsave - write.js');
+              loger.error(err);
+            } else {
+              if(rows.insertId){
+                res.send({ result: 'success' , tocken:'저장성공'});
+              }else{
+                res.send({ result: 'fail' , tocken:'저장실패'});
+              }
+            }
+          });
+
+        }
+
+      });
+
+
+
+
+
+  }
+});
+
+
 
 
 module.exports = router;

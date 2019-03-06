@@ -11,23 +11,25 @@
             
                 <div class="row"> 
                     <div class="col-md-4">
-                            <select class="form-control" id="category">
+                            <select title="게시판" class="form-control" id="bigtitle">
                                     <option>게시판선택</option>
-                                    <option>사진방</option>
-                                    <option>영상방</option>
-                                    <option>나눔방</option>
-                                    <option>공지사항</option>
+                                    <%if (selectrows != undefined) { %>
+                                        <% for (var i = 0; i < selectrows.length; i++) {  %>
+                                            <option value="<%= selectrows[i]['bignum'] %>"><%=selectrows[i]['title']%></option>
+                                        <% } %>
+                                    <% } else { %>
+                                        <option value="">게시판이 없습니다</option>
+                                    <% } %>
                             </select>
                     </div><!-- /col-md-2 -->
 
 
-
                     <div class="col-md-6">
-                    <input type="text" id = "title" class="form-control" aria-label="제목" placeholder="제목">
+                    <input type="text" id = "posttitle" class="form-control" aria-label="제목" placeholder="제목">
                     </div>
 
                     <div class="col-md-2">
-                            <label class="checkbox-inline"><input type="checkbox" value="">공지글</label>
+                            <label class="checkbox-inline"><input type="checkbox" value="" id = "notice">공지글</label>
                     </div><!-- /col-md-2 -->
 
 
@@ -46,20 +48,11 @@
             <div class="row">
                     <div class="col-md-3"></div>
                     <div class="col-md-3"></div>
-                    <div class="col-md-3"><button type="button" class="btn btn-success btn-lg text-center" onclick="showContent();">작성</button></div>
+                    <div class="col-md-3"><button type="button" class="btn btn-success btn-lg text-center" id = "saveBtn">작성</button></div>
                     <div class="col-md-3"></div>
             </div>
             <br><br>
 
- 
-            <script>
-            $('#summernote').summernote({
-                height: 400,                 // set editor height
-                minHeight: null,             // set minimum height of editor
-                maxHeight: null,             // set maximum height of editor
-                focus: true                  // set focus to editable area after initializing summernote
-            });
-            </script>
 
 
     </div>
@@ -69,8 +62,110 @@
     <% include ../footer %>
  
     <script>
-        function showContent() {
-            $('.output').html($('#summernote').summernote('code'));
+        $(document).ready(function () {
+            //저장버튼 클릭
+            $(document).on('click', '#saveBtn', function () {
+
+                //값 가져오기
+                var bigwriteSelect = document.getElementById("bigtitle");                           //분류
+                var bigwritetext = bigwriteSelect.options[bigwriteSelect.selectedIndex].text;
+                var posttitle = $("#posttitle").val();                                              //포스트 제목
+                var summernoteContent = $('#summernote').summernote('code');                        //썸머노트
+
+                if(bigwritetext == '게시판선택' || bigwritetext == undefined || bigwritetext == ''){
+                    alert('게시판을 선택해주세요');
+                    return;
+                }else if (posttitle == null || posttitle == undefined || posttitle == ''){
+                    alert('글제목을 작성해주세요.');
+                    return;
+                }else if (summernoteContent == null || summernoteContent == undefined || summernoteContent == ''){
+                    alert('본문을 작성해주세요.');
+                    return;
+                }else{
+                    //유효성 검사후 저장
+                    saveContent();
+                }
+                
+            });
+            $("#summernote").summernote({
+                placeholder: '공동체에 도움이 될 자료를 올려주세요.',
+                height: 500,
+                callbacks: {
+                    onImageUpload: function (files, editor, welEditable) {
+                        for (var i = files.length - 1; i >= 0; i--) {
+                            sendFile(files[i], this);
+                        }
+                    },
+
+                    onMediaDelete: function (target) {
+                        //alert(target[0].src) 
+                        deleteFile(target[0].src);
+                    }
+                }
+            });
+        });
+
+//사진 파일 저장
+function sendFile(file, el) {
+    var form_data = new FormData();
+    form_data.append('file', file);
+    $.ajax({
+        data: form_data,
+        type: "POST",
+        url: '/write/writepostimagesave',
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (url) {
+            $('#summernote').summernote('editor.insertImage', url['url']);
         }
+    });
+}
+//사진 파일 삭제
+function deleteFile(src) {
+    $.ajax({
+        data: { src: src },
+        type: "POST",
+        url: '/write/writepostimagedelete',
+        cache: false,
+        success: function (resp) {
+        //console.log(resp);
+        }
+    });
+}
+
+//저장
+function saveContent() {
+    var posttitle = $("#posttitle").val();                                  //포스트 제목
+    var notice = $("#notice").is(":checked");                               //공지 여부
+    var bigSelect = document.getElementById("bigtitle");                    //게시판 pk
+    var bignum = bigSelect.options[bigSelect.selectedIndex].value;
+    var bigtext = bigSelect.options[bigSelect.selectedIndex].text;
+    var summernoteContent = $('#summernote').summernote('code');        //썸머노트
+    $.ajax({
+        url: '/write/writepostsave',
+        dataType: 'json',
+        type: 'post',
+        data: {
+            posttitle: posttitle,
+            notice: notice,
+            bignum: bignum,
+            summernoteContent: summernoteContent
+        },
+        success: function (data) {
+            if (data['result'] == 'success') {
+                alert(data['tocken']);
+                location.reload();
+            } else if (data['result'] == 'fail') {
+                alert(data['tocken']);
+                return;
+            }
+        },
+        error: function (jqXHR, textStatus, err) {
+            //show error message
+            alert('죄송합니다. 작업중 오류가 발생했습니다.' + "상태 : " + textStatus + ', error : ' + err);
+        }
+    });
+}
     </script>
                  
