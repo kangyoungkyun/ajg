@@ -3,6 +3,7 @@ var router = express.Router();
 var loger = require('../../logmodule.js');                  //로그모듈
 var multer = require('multer')                          //파일관련 모듈
 var client = require('../../config/mysqlconfig.js');        //mysql 모듈
+var fs = require('fs'); 
 loger.info("메모리 로딩 시작. - write.js");
 
 /* 대분류 - 게시판 생성 페이지 */
@@ -152,15 +153,60 @@ router.post('/write/writepostsave', function (req, res, next) {
         }
 
       });
-
-
-
-
-
   }
 });
 
 
+var uploadImages = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+
+      //파일이 이미지 파일이면
+      if (file.mimetype == "image/jpeg" || file.mimetype == "image/jpg" || file.mimetype == "image/png") {
+        cb(null, 'public/mypostimages/');
+        //텍스트 파일이면 
+      } else {
+        loger.info("그림파일만 등록할 수 있습니다.");
+      };
+    },
+    filename: function (req, file, cb) {
+      var nowdate = new Date().toLocaleString();
+      var nowdate2 = nowdate.replace(' ','');
+      var nowdate3 = nowdate2.replace(':','');
+      var nowdate4 = nowdate3.replace('-','');
+      var nowdate5 = nowdate4.replace('-','');
+      var now = nowdate5.replace(':','');
+      var filename = now + '.png';
+      cb(null,filename);                          // cb 콜백함수를 통해 전송된 파일 이름 설정
+    }
+  }),
+});
+
+//사진 파일 선택하면 바로 콜 - 사진 저장 진입
+router.post('/write/writepostimagesave', uploadImages.single('file'), function (req, res, next) {
+  loger.info('나의 포스터 사진 저장 진입  - /write/writepostimagesave - write.js');
+  res.send({ url: "/mypostimages/" + req.file['filename']});
+});
+
+
+//나의 포스터 삭제 액션!
+router.post('/write/writepostimagedelete', function (req, res, next) {
+  loger.info('나의 포스터 이미지 삭제 진입  - /write/writepostimagedelete - write.js');
+
+  var beforeSrc = req.body.src;
+  var afterSrc = beforeSrc.split('/');
+  var filename = afterSrc.slice(-1)[0];     //제일 마지막 배열 요소 가져오기
+                   
+  
+  loger.info('삭제할 파일 이름 : ' + filename);
+
+  fs.unlink('./public/mypostimages/'+ filename,function (err) {
+    if (err) throw err;
+    console.log('successfully deleted ./public/mypostimages/'+filename);
+  });
+
+
+});
 
 
 module.exports = router;
