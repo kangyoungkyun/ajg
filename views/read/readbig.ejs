@@ -14,58 +14,126 @@
         
                         <!-- Title -->
                         <h1>게시판</h1>
-        
-                        <table class="table">
-                                <thead>
-                                  <tr>
+                        <%if (postrows != undefined) { %>
+                          <table class="table">
+                            <thead>
+                                <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
+                                    <th scope="col">제목</th>
+                                    <th scope="col">작성자</th>
+                                    <th scope="col">일자</th>
+                                    <th scope="col">hit</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
+                          <% for (var ii = 0; ii < postrows.length; ii++) {  %>
+                            <tr>
+                                <td><%=(ii + 1)%></td>
+                                <td><a href="/read/readpost?postnum=<%=postrows[ii]['postnum']%>"><%=postrows[ii]['title']%></a></td>
+                                <td><%=postrows[ii]['author']%></td>
+                                <td><%=postrows[ii]['regdate']%></td>
+                                <td><%=postrows[ii]['cnt']%></td>
+                             </tr>
+                          <% } %>
+                        </tbody>
+                      </table>
+                      <% } else{ %>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">알림</th>
                                   </tr>
-                                  <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                  </tr>
-                                  <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                  </tr>
-                                  <tr>
-                                        <th scope="row">3</th>
-                                        <td>Larry</td>
-                                        <td>the Bird</td>
-                                        <td>@twitter</td>
-                                      </tr>
-                                      <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td>@twitter</td>
-                                          </tr>
-                                          <tr>
-                                                <th scope="row">3</th>
-                                                <td>Larry</td>
-                                                <td>the Bird</td>
-                                                <td>@twitter</td>
-                                              </tr>
-                                </tbody>
-                              </table>
+                                </thead>
+                                <tbody>
+                         
+                            <tr>
+                                <td>게시판 준비중입니다:)</td>
+                             </tr>
+                        </tbody>
+                      </table>
+
+                      <% } %>  
+                    
                         <hr>
-        
-                        <!-- Blog Comments -->
+                                <!-- 페이징    -->
+                                <br>
+                                <br>
+
+                        <div class="container">
+
+                          <div class="row">
+
+
+                              <div class="col-md-4"></div>
+                              <div class="col-md-4">
+
+                                  <ul class="pagination">
+
+                                      <%if (postrows != undefined) { %>
+                
+                                          <%
+                                          var bigmun = postrows[0]['bignum']
+          
+                                          var curSet = pasing.curSet
+                                          var endPage = pasing.endPage
+                                          var startPage = pasing.startPage
+                                          var totalSet = pasing.totalSet
+                                          var totalPage = pasing.totalPage
+                                          var page_list_size = pasing.page_list_size
+                                          var page_size = pasing.page_size
+                                          var curPage = pasing.curPage
+                                          %>
+                                          
+                                          
+                                          <% if(curSet > 1){ %>
+                                          
+                                          <li class="page-item">
+                                              <a class="page-link" href='/read/readbig?num=<%=bigmun%>&pagenum=<%= ( startPage - 1) %>'>이전</a>
+                                          </li>
+                                          
+                                          <%}%>
+                                          
+                                          
+                                          <% for(var i = startPage; i <= endPage; i++){
+          
+                                          if(i > totalPage){break;}
+                                          
+                                              if(i == curPage){ %>
+          
+                                              <li class="page-item active" value=<%= i %>  >
+                                                  <a class="page-link" href='/read/readbig?num=<%=bigmun%>&pagenum=<%= i %>'>
+                                                      <%= i %>
+                                                  </a>
+                                              </li>
+                                              
+                                              <% }else{ %>
+                                              
+                                              <li class="page-item" value=<%= i %>  >
+                                                  <a class="page-link" href='/read/readbig?num=<%=bigmun%>&pagenum=<%= i %>'>
+                                                      <%= i %>
+                                                  </a>
+                                              </li>
+                                              <%}%>
+                                          <%}%>
+                                          
+                                          <% if(curSet < totalSet){ %>
+                                              <li class="page-item" >
+                                                  <a class="page-link" href='/read/readbig?num=<%=bigmun%>&pagenum=<%= ( endPage + 1) %>'>다음</a>
+                                              </li>
+                                          <% } %>
+                                          
+                                          <%}%>
+                                      </ul>
+    
+                              </div>
+    
+    
+                            </div><!-- /.pasing -->
+
+                              </div>
+                              <div class="col-md-4"></div>
+
+                            
                         <br>
         
                     </div>

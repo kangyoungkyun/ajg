@@ -149,9 +149,7 @@ router.post('/write/writepostsave', function (req, res, next) {
               }
             }
           });
-
         }
-
       });
   }
 });

@@ -12,14 +12,22 @@
                 <span class="sr-only">(current)</span>
               </a>
             </li>
+
+
+            <%if (menus != undefined) { %>
+              <% for (var i = 0; i < menus.length; i++) {  %>
+            <li class="nav-item">
+                <a class="nav-link" href="/read/readbig?num=<%=menus[i]['bignum']%>"><%=menus[i]['title']%></a>
+            </li>
+              <% } %>
+            <% } %>
+
+
             <li class="nav-item">
                 <a class="nav-link" href="/write/bigwrite">게시판생성</a>
-              </li>
+            </li>
               <li class="nav-item">
                       <a class="nav-link" href="/write/write">글작성</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/read/readbig">글게시판보기</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/read/readpost">글읽기</a>
