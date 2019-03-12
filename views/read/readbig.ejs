@@ -13,7 +13,8 @@
                         <!-- Blog Post -->
         
                         <!-- Title -->
-                        <h1>게시판</h1>
+                        <h3>게시판</h3>
+                        
                         <%if (postrows != undefined) { %>
                           <table class="table">
                             <thead>
@@ -28,11 +29,11 @@
                                 <tbody>
                           <% for (var ii = 0; ii < postrows.length; ii++) {  %>
                             <tr>
-                                <td><%=(ii + 1)%></td>
-                                <td id='title<%=ii%>'><a href="/read/readpost?postnum=<%=postrows[ii]['postnum']%>"></a></td>
-                                <td><%=postrows[ii]['author']%></td>
-                                <td id='regdate<%=ii%>'></td>
-                                <td><%=postrows[ii]['cnt']%></td>
+                                <td style="font-size:88%;"><%=postrows[ii]['postnum']%></td>
+                                <td style="font-size:88%;"> <a id='title<%=ii%>' href="/read/readpost?postnum=<%=postrows[ii]['postnum']%>"></a></td>
+                                <td style="font-size:88%;"><%=postrows[ii]['author']%></td>
+                                <td style="font-size:88%;" id='regdate<%=ii%>'></td>
+                                <td style="font-size:88%;"><%=postrows[ii]['cnt']%></td>
                              </tr>
 
                              <script>
@@ -47,8 +48,8 @@
                                     var title = "<%=postrows[ii]['title']%>"; 
 
                                     //제목에 5글자 보다 크면
-                                    if(title.length > 5){
-                                        var titleResult = title.substring(0,4);
+                                    if(title.length > 15){
+                                        var titleResult = title.substring(0,15);
                                         titleResult = titleResult+ '..'
                                         document.getElementById("title<%=ii%>").innerHTML = titleResult;
                                                                   
