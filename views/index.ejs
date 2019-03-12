@@ -26,39 +26,96 @@
         <div class="row">
             <br>
                 <div class="col-lg-6 col-md-6 mb-6">
-                        <h3>+공지사항</h3>        
+                        <h3>+최신글</h3>        
                         <table class="table table-borderless">
                           <tbody>
-                            <tr>
-                              <td>new</td>
-                              <td>john@example.com</td>
-                              <td>2019-03-05</td>
-                            </tr>
+                              <%if (newrows != undefined) { %>
+                                <% for (var i = 0; i < newrows.length; i++) {  %>
+                                  <tr>
+                                      <td>new</td>
+                                      <td><a id='title<%=i%>' href="/read/readpost?postnum=<%=newrows[i]['postnum']%>"></a></td>
+                                      <td id="regdate<%=i%>"></td>
+                                  </tr>
+                                    <script>
+                                        //날짜 길이 다듬기
+                                        var htmlTag = "<%=newrows[i]['regdate']%>"; 
+                                        var afterStr = htmlTag.split(' ');
+                                        var date = afterStr[0];
+                                        var result = date.replace( /-/gi, '.');
+                                        var dateResult = result.substring(2,10);
+                                        document.getElementById("regdate<%=i%>").innerHTML = dateResult;
+                                       
+                                        var title = "<%=newrows[i]['title']%>"; 
+    
+                                        //제목에 5글자 보다 크면
+                                        if(title.length > 10){
+                                            var titleResult = title.substring(0,10);
+                                            titleResult = titleResult+ '..'
+                                            document.getElementById("title<%=i%>").innerHTML = titleResult;
+                                                                      
+                                        }else{
+                                            document.getElementById("title<%=i%>").innerHTML = title;
+                                        }
+    
+                                </script>
+                                <%}%>
+                              <%} else {%>
+                                <tr>
+                                    <td></td>
+                                    <td>준비중입니다...</td>
+                                    <td></td>
+                                </tr>
+                              <%}%>
 
-                            <tr>
-                              <td>new</td>
-                              <td>mary@example.com</td>
-                              <td>2019-03-05</td>
-                            </tr>
+
+
+
                           </tbody>
                         </table>
                 </div>
                 <br>
                 <div class="col-lg-6 col-md-6 mb-6">
-                        <h3>+주보</h3>        
+                        <h3>+공지사항</h3>        
                         <table class="table table-borderless">
                           <tbody>
-                            <tr>
-                              <td>new</td>
-                              <td>john@example.com</td>
-                              <td>2019-03-05</td>
-                            </tr>
+                              <%if (noticerows != undefined) { %>
+                                <% for (var i = 0; i < noticerows.length; i++) {  %>
+                                  <tr>
+                                      <td>new</td>
+                                      <td><a id='mytitle<%=i%>' href="/read/readpost?postnum=<%=noticerows[i]['postnum']%>"></a></td>
+                                      <td id="myregdate<%=i%>"></td>
+                                  </tr>
+                                  <script>
+                                      //날짜 길이 다듬기
+                                      var htmlTag2 = "<%=noticerows[i]['regdate']%>"; 
+                                      var afterStr2 = htmlTag2.split(' ');
+                                      var date2 = afterStr2[0];
+                                      var result2 = date2.replace( /-/gi, '.');
+                                      var dateResult2 = result2.substring(2,10);
+                                      document.getElementById("myregdate<%=i%>").innerHTML = dateResult2;
+                                     
+                                      var title2 = "<%=noticerows[i]['title']%>"; 
+  
+                                      //제목에 5글자 보다 크면
+                                      if(title2.length > 10){
+                                          var titleResult2 = title2.substring(0,10);
+                                          titleResult2 = titleResult+ '..'
+                                          document.getElementById("mytitle<%=i%>").innerHTML = titleResult2;
+                                                                    
+                                      }else{
+                                          document.getElementById("mytitle<%=i%>").innerHTML = title2;
+                                      }
+  
+                              </script>
+                                  <%}%>
 
-                            <tr>
-                              <td>new</td>
-                              <td>mary@example.com</td>
-                              <td>2019-03-05</td>
-                            </tr>
+                               <%} else { %>
+                                <tr>
+                                    <td>공지</td>
+                                    <td>준비중입니다...</td>
+                                    <td></td>
+                                </tr>
+                                <%}%>
                           </tbody>
                         </table>
                 </div>
