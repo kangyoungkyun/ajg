@@ -17,7 +17,7 @@
             <%if (menus != undefined) { %>
               <% for (var i = 0; i < menus.length; i++) {  %>
             <li class="nav-item">
-                <a class="nav-link" href="/read/readbig?num=<%=menus[i]['bignum']%>"><%=menus[i]['title']%></a>
+                <a class="nav-link" href="/read/readbig?num=<%=menus[i]['bignum']%>&album=<%=menus[i]['album']%>"><%=menus[i]['title']%></a>
             </li>
               <% } %>
             <% } %>

@@ -5,7 +5,7 @@
     <br><br><br>
             <div class="row">
                     
-                    <!-- Blog Post Content Column -->
+                    <!-- Blog Post Content Column > -->
                     <div class="col-lg-1"></div>
                     <div class="col-lg-10">
         
@@ -15,72 +15,45 @@
                                           <h2>아중감 갤러리</h2>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="card border-0 transform-on-hover">
-                                                    <a class="lightbox" href="/read/readpost">
-                                                        <img src="../main.jpg" alt="Card Image" class="card-img-top">
-                                                    </a>
-                                                    <div class="card-body">
-                                                        <h6><a href="#">Lorem Ipsum</a></h6>
-                                                        <p class="text-muted card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna.</p>
+                                               
+                                                <%if (postrows != undefined) { %>
+                                                  <% for (var ii = 0; ii < postrows.length; ii++) {  %>
+                                                    <div class="col-md-6 col-lg-4">
+                                                            <div class="card border-0 transform-on-hover">
+                                                                <a class="lightbox" href="/read/readpost">
+                                                                    <img src="../main.jpg" alt="Card Image" class="card-img-top">
+                                                                </a>
+                                                                <div class="card-body">
+                                                                    <h6><a href="#"><%=postrows[ii]['title']%></a></h6>
+                                                                    <p class="text-muted card-text"><%=postrows[ii]['description']%></p>
+                                                                </div>
+                                                            </div>
                                                     </div>
+
+                                                  <% } %>
+                                              <% } else{ %>
+                                                <div class="col-md-6 col-lg-4">
+                                                        <div class="card border-0 transform-on-hover">
+                                                            <a class="lightbox" href="#">
+                                                            </a>
+                                                            <div class="card-body">
+                                                                <h6><a href="#">알림</a></h6>
+                                                                <p class="text-muted card-text">사진을 준비중입니다.</p>
+                                                            </div>
+                                                        </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="card border-0 transform-on-hover">
-                                                    <a class="lightbox" href="/read/readpost">
-                                                        <img src="../main.jpg" alt="Card Image" class="card-img-top">
-                                                    </a>
-                                                    <div class="card-body">
-                                                        <h6><a href="#">Lorem Ipsum</a></h6>
-                                                        <p class="text-muted card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="card border-0 transform-on-hover">
-                                                    <a class="lightbox" href="/read/readpost">
-                                                        <img src="../main.jpg" alt="Card Image" class="card-img-top">
-                                                    </a>
-                                                    <div class="card-body">
-                                                        <h6><a href="#">Lorem Ipsum</a></h6>
-                                                        <p class="text-muted card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="card border-0 transform-on-hover">
-                                                    <a class="lightbox" href="/read/readpost">
-                                                        <img src="../main.jpg" alt="Card Image" class="card-img-top">
-                                                    </a>
-                                                    <div class="card-body">
-                                                        <h6><a href="#">Lorem Ipsum</a></h6>
-                                                        <p class="text-muted card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="card border-0 transform-on-hover">
-                                                    <a class="lightbox" href="/read/readpost">
-                                                        <img src="../main.jpg" alt="Card Image" class="card-img-top">
-                                                    </a>
-                                                    <div class="card-body">
-                                                        <h6><a href="#">Lorem Ipsum</a></h6>
-                                                        <p class="text-muted card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="card border-0 transform-on-hover">
-                                                    <a class="lightbox" href="/read/readpost">
-                                                        <img src="../main.jpg" alt="Card Image" class="card-img-top">
-                                                    </a>
-                                                    <div class="card-body">
-                                                        <h6><a href="#">Lorem Ipsum</a></h6>
-                                                        <p class="text-muted card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                              <% } %>  
+
+
+
+
+
+
+
+
+
+
+
                                         </div>
                                     </div>
                                 </section>
@@ -91,6 +64,81 @@
         
                     </div>
                     <div class="col-lg-1"></div>
+
+                    <br>
+                    <br>
+        <div class="container">
+
+                <div class="row">
+
+
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+
+                        <ul class="pagination">
+
+                            <%if (postrows != undefined) { %>
+        
+                                <%
+                                var bigmun = postrows[0]['bignum']
+
+                                var curSet = pasing.curSet
+                                var endPage = pasing.endPage
+                                var startPage = pasing.startPage
+                                var totalSet = pasing.totalSet
+                                var totalPage = pasing.totalPage
+                                var page_list_size = pasing.page_list_size
+                                var page_size = pasing.page_size
+                                var curPage = pasing.curPage
+                                %>
+                                
+                                
+                                <% if(curSet > 1){ %>
+                                
+                                <li class="page-item">
+                                    <a class="page-link" href='/read/readbig?num=<%=bigmun%>&pagenum=<%= ( startPage - 1) %>'>이전</a>
+                                </li>
+                                
+                                <%}%>
+                                
+                                
+                                <% for(var i = startPage; i <= endPage; i++){
+
+                                if(i > totalPage){break;}
+                                
+                                    if(i == curPage){ %>
+
+                                    <li class="page-item active" value=<%= i %>  >
+                                        <a class="page-link" href='/read/readbig?num=<%=bigmun%>&pagenum=<%= i %>'>
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                    
+                                    <% }else{ %>
+                                    
+                                    <li class="page-item" value=<%= i %>  >
+                                        <a class="page-link" href='/read/readbig?num=<%=bigmun%>&pagenum=<%= i %>'>
+                                            <%= i %>
+                                        </a>
+                                    </li>
+                                    <%}%>
+                                <%}%>
+                                
+                                <% if(curSet < totalSet){ %>
+                                    <li class="page-item" >
+                                        <a class="page-link" href='/read/readbig?num=<%=bigmun%>&pagenum=<%= ( endPage + 1) %>'>다음</a>
+                                    </li>
+                                <% } %>
+                                
+                                <%}%>
+                            </ul>
+
+                    </div>
+
+
+                    </div><!-- /.pasing -->
+
+                    </div>
                 </div>
                 <!-- /.row -->
 

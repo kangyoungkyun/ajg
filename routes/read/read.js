@@ -8,7 +8,10 @@ loger.info("메모리 로딩 시작. - read.js");
 /* 게시판 전체글 보기 */
 router.get('/read/readbig', function (req, res, next) {
   var bignum = req.query.num;       //대분류 pk 값
-  loger.info(bignum);
+  var album = req.query.album;       //대분류 pk 값
+  
+  loger.info("앨범");
+  loger.info(album);
 
   var pagenum = req.query.pagenum;
   if (pagenum == undefined) {
@@ -85,19 +88,36 @@ router.get('/read/readbig', function (req, res, next) {
       } else {
         
         if(postrows.length > 0){
-          res.render('read/readbig', {
-            postrows: postrows,
-            pasing:pasing
-          });
+          //게시판이 앨범게시판이 아닐경우
+          if (album == 'false' || album == undefined || album == ''|| album == false) {
+            res.render('read/readbig', {
+              postrows: postrows,
+              pasing: pasing
+            });
+          } else {
+            res.render('read/readgallery', {
+              postrows: postrows,
+              pasing: pasing
+            });
+          }
+
+
         }else{
-          res.render('read/readbig', {
-            postrows: undefined,
-            pasing : pasing
-          });
+          //게시판이 앨범게시판이 아닐경우
+          if (album == 'false' || album == undefined || album == ''|| album == false) {
+            res.render('read/readbig', {
+              postrows: undefined,
+              pasing: pasing
+            });
+          } else {
+            res.render('read/readgallery', {
+              postrows: undefined,
+              pasing: pasing
+            });
+          }
         }
       }
     });
-
   });
 });
 
@@ -110,11 +130,75 @@ router.get('/read/readgallery', function (req, res, next) {
 
 /* 포스트 보기 */
 router.get('/read/readpost', function (req, res, next) {
+
   var postnum = req.query.postnum;       //대분류 pk 값
   loger.info("postnum");
   loger.info(postnum);
-  res.render('read/readpost');
 
+          //포스트 글 조회
+          var sql = 'select * from postTbl where postnum = ?';
+          client.query(sql, [postnum], function (err, postonerow, results) {
+            if (err) {
+              loger.error('내포스트 글 조회 문장에 오류가 있습니다. - /read/readpost - /read.js');
+              loger.error(err);
+            } else {
+  
+              //포스트 글 존재.
+              if (postonerow.length > 0) {
+                
+                var newcnt = Number(postonerow[0]['cnt']) + 1;
+  
+                //조회수 조회해서 +1 한 후 업데이트!
+                var cntupatesql = 'update postTbl set cnt= ' + newcnt + ' where postnum= ?';
+                client.query(cntupatesql, [postnum], function (err5, postrows, results) {
+                  if (err5) {
+                    loger.error('내포스트 조회수 업데이트 문장에 오류가 있습니다. - /read/readpost - /read.js');
+                    loger.error(err5);
+                  } else {
+  
+                //조회수 업데이트 성공!
+  
+                //글 조회
+                var sql4 =  'select * from userTbl u , postTbl p where u.usernum = p.usernum and p.postnum = ?';
+  
+                    client.query(sql4, [postnum], function (err4, postrows, results) {
+                      if (err4) {
+                        loger.error('내포스트 글 조회 문장에 오류가 있습니다. - /read/readpost - /read.js');
+                        loger.error(err4);
+                      } else {
+   
+                        //글 존재할때
+                        if (postrows.length > 0) {
+                          loger.info("포스트 글 존재!");
+                          loger.info(postrows.length);
+                          loger.info(postrows[0]['title']);
+                          loger.info(postrows[0]['nickname']);
+                          loger.info(postrows);
+
+                          res.render('read/readpost', {
+                            postrows: postrows
+                          });
+   
+                          //글 존재 (x)   
+                        } else {
+
+                          loger.info("포스트 글 존재 안함!");
+                          res.render('read/readpost', {
+                            postrows: undefined
+                          });
+
+                        }
+                      }
+                    });
+                  }
+                });
+              } else {
+                res.render('read/readpost', {
+                  postrows: undefined
+                });
+              }
+            }
+          });
 });
 
 
