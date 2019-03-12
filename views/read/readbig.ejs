@@ -18,22 +18,46 @@
                           <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">제목</th>
-                                    <th scope="col">작성자</th>
-                                    <th scope="col">일자</th>
-                                    <th scope="col">hit</th>
+                                    <th scope="col" style="width: 5%; font-size:80%;">#</th>
+                                    <th scope="col" style="width: 40%; font-size:80%;">제목</th>
+                                    <th scope="col" style="width: 20%; font-size:80%;">작성자</th>
+                                    <th scope="col" style="width: 30%; font-size:80%;">일자</th>
+                                    <th scope="col" style="width: 5%; font-size:80%;">hit</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                           <% for (var ii = 0; ii < postrows.length; ii++) {  %>
                             <tr>
                                 <td><%=(ii + 1)%></td>
-                                <td><a href="/read/readpost?postnum=<%=postrows[ii]['postnum']%>"><%=postrows[ii]['title']%></a></td>
+                                <td id='title<%=ii%>'><a href="/read/readpost?postnum=<%=postrows[ii]['postnum']%>"></a></td>
                                 <td><%=postrows[ii]['author']%></td>
-                                <td><%=postrows[ii]['regdate']%></td>
+                                <td id='regdate<%=ii%>'></td>
                                 <td><%=postrows[ii]['cnt']%></td>
                              </tr>
+
+                             <script>
+                                    //날짜 길이 다듬기
+                                    var htmlTag = "<%=postrows[ii]['regdate']%>"; 
+                                    var afterStr = htmlTag.split(' ');
+                                    var date = afterStr[0];
+                                    var result = date.replace( /-/gi, '.');
+                                    var dateResult = result.substring(2,10);
+                                    document.getElementById("regdate<%=ii%>").innerHTML = dateResult;
+                                   
+                                    var title = "<%=postrows[ii]['title']%>"; 
+
+                                    //제목에 5글자 보다 크면
+                                    if(title.length > 5){
+                                        var titleResult = title.substring(0,4);
+                                        titleResult = titleResult+ '..'
+                                        document.getElementById("title<%=ii%>").innerHTML = titleResult;
+                                                                  
+                                    }else{
+                                        document.getElementById("title<%=ii%>").innerHTML = title;
+                                    }
+
+                            </script>
+
                           <% } %>
                         </tbody>
                       </table>
