@@ -18,12 +18,15 @@
 
                 
                               <%if (whoami != undefined) { %>
+                                <%if (authnum == '0') { %>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/write/bigwrite">게시판생성</a>
                                 </li>
                                   <li class="nav-item">
                                           <a class="nav-link" href="/write/write">게시글작성</a>
                                 </li>
+                                <% } %> 
+
                               <% } else{ %>
    
                                 <% } %>  

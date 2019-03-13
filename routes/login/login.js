@@ -59,8 +59,8 @@ router.post('/login/usersignup', function (req, res, next) {
                             var salt = buf.toString('base64');
 
                             //mysql db에 유저 정보 넣어주기
-                            client.query('insert into userTbl (nickname, id, pw, stop, stopdate,salt) values (?,?,?,?,?,?)',
-                              [nickname, email, pwdhashkey, 'n', 'n', salt],
+                            client.query('insert into userTbl (nickname, id, pw, stop, stopdate,salt,auth) values (?,?,?,?,?,?,?)',
+                              [nickname, email, pwdhashkey, 'n', 'n', salt,'3'],
                               function (error, result, fields) {
                                 if (error) {
                                   loger.error('유저 가입시 정보 삽입 쿼리 문장에 오류가 있습니다. - login.js - /login/usersignup');
@@ -70,6 +70,7 @@ router.post('/login/usersignup', function (req, res, next) {
                                   //사용자 nickname을 세션 데이터로 저장
                                   req.session.authId = email;
                                   req.session.nickname = nickname;
+                                  req.session.authnum = '3';
                                   req.session.save(function () {
                                     res.send({ result: 'success', tocken: '가입을 축하합니다.' });
                                   });
@@ -102,8 +103,8 @@ router.post('/login/loginup', function (req, res, next) {
   var email = req.body.email;
   var pwd = req.body.pwd;
 
-  client.query('SELECT  ??, ??, ??,?? FROM ?? WHERE ?? = ?',
-    ['id','nickname', 'pw', 'salt', 'userTbl', 'id', email], function (err, rows, results) {
+  client.query('SELECT ??, ??, ??, ??,?? FROM ?? WHERE ?? = ?',
+    ['auth' ,'id','nickname', 'pw', 'salt', 'userTbl', 'id', email], function (err, rows, results) {
 
       if (err) {
         loger.error('로그인 쿼리 문장에 오류가 있습니다. - login.js - /login/loginup');
@@ -117,6 +118,7 @@ router.post('/login/loginup', function (req, res, next) {
                       //로그인 성공 : 사용자 nickname을 세션 데이터로 저장
                       req.session.authId = rows[0].id;
                       req.session.nickname = rows[0].nickname;
+                      req.session.authnum = rows[0].auth;
                       req.session.save(function () {
                         res.send({ result: 'success', tocken: '로그인 성공' });
                       });

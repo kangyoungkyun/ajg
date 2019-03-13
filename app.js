@@ -73,14 +73,16 @@ app.use(function(req, res, next) {
       loger.info("세션세팅");
       res.locals.email = req.session.authId;
       res.locals.whoami = req.session.nickname;
-
       res.locals.menus = menus;
-      loger.info(res.locals.menus.length);
+      res.locals.authnum = req.session.authnum; 
+      loger.info(res.locals.authnum);
+
     } else {
       callMenu();
       res.locals.whoami = undefined;
       res.locals.email = undefined;
       res.locals.menus = menus;
+      res.locals.authnum = undefined; 
     }
   
       next();

@@ -52,10 +52,10 @@ html{
 /*전체 폰트 설정*/
 body{font-family: 'Nanum Myeongjo', serif;}
 
-html, body , footer{
-    margin: 0;
-    padding: 0;
-
+body{
+  margin-bottom: -100px;
+  margin-top: 0;
+  position: relative;
 }
 
 .jumbotron{
@@ -111,6 +111,16 @@ a { color: inherit; }
     background-color: gray;
     border: solid 1px gray;
 }
+
+/*하단 고정*/
+footer {
+    margin-bottom: -15%;
+    bottom: -100px;
+    height: 100px;
+    position: absolute;
+    width: 100%;
+}
+
     </style>
   </head>
   <body>
