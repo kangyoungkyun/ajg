@@ -11,12 +11,20 @@
                     <div class="col-lg-10">
         
                         <!-- Blog Post 게시판 제목-->
-                        
+
                         <%if (bigrows != undefined) { %>
                         <!-- Title -->
                         <h3>📌<%=bigrows[0]['title']%></h3>
+                            <div class="text-right">                                    
+                                <%if (whoami != undefined) { %>
+                                    <%if (authnum == '0') { %>
+                                        <div class="text-right"><a href="/write/middlemodiy?num=<%=bigrows[0]['bignum']%>" class="btn-sm btn-secondary">수정</a></div>
+                                    <% } %>
+                                <% } %>
+                            </div>
                         <p class="text-black-50">❇️<%=bigrows[0]['description']%></p>
                         <br>
+                        
                         <% } %>
 
                         <%if (postrows != undefined) { %>
@@ -167,6 +175,7 @@
         
                     </div>
                     <div class="col-lg-1"></div>
+
                 </div>
                 <!-- /.row -->
 

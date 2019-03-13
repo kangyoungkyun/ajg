@@ -31,7 +31,6 @@ router.get('/write/write', function (req, res, next) {
 
 });
 
-
 // //파일 저장위치와 파일이름 설정
 // var storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
@@ -187,7 +186,7 @@ router.post('/write/writepostimagesave', uploadImages.single('file'), function (
 });
 
 
-//나의 포스터 삭제 액션!
+//나의 포스터 이미지 삭제 액션!
 router.post('/write/writepostimagedelete', function (req, res, next) {
   loger.info('나의 포스터 이미지 삭제 진입  - /write/writepostimagedelete - write.js');
 
@@ -203,10 +202,51 @@ router.post('/write/writepostimagedelete', function (req, res, next) {
     console.log('successfully deleted ./public/mypostimages/'+filename);
   });
 
-
 });
 
 
+//게시판 수정
+router.get('/write/middlemodiy', function (req, res, next) {
+
+  var bignum = req.query.num;       //중분류 pk 값
+  loger.info(bignum);
+
+  var sql2 = 'select * from bigTbl where bignum = ?';
+  client.query(sql2, [bignum], function (err2, onerow, results) {
+    if (err2) {
+      loger.error('대분류 글 하나 조회 문장에 오류가 있습니다. - /write/middlemodiy - /write.js');
+      loger.error(err2);
+    } else {
+      //수정할 대분류 글과 왼쪽 사이드 메뉴명 넘기기
+      res.render('write/bigmodiy', {
+        onerow: onerow
+      });
+    }
+  });
+});
+
+/*게시판 수정 액션 */
+router.post('/write/middlemodiy',function (req, res, next) {
+  loger.info('게시판 수정 진입  - /write/middlemodiy - write.js');
+
+  var bignum = req.body.bignum;
+  var title = req.body.title;
+  var close = req.body.close;
+  var album = req.body.album;
+  var summernoteContent = req.body.summernoteContent;
+
+  var updatesql = 'update bigTbl set title = ? , description = ? , close = ?, album=? where bignum = ? ';
+  var params = [title, summernoteContent, close,album, bignum];
+  client.query(updatesql, params, function (err, rows, fields) {
+    if (err) {
+      loger.error('게시판 update 쿼리에 오류가 있습니다. - /write/middlemodiy - write.js');
+      loger.error(err);
+      res.send({ result: 'fail' , tocken:'수정실패'});
+    } else {
+      res.send({ result: 'success' , tocken:'수정성공'});
+    }
+  });
+});
 module.exports = router;
 loger.info("메모리 로딩 완료. - write.js");
 

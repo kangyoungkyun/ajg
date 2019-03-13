@@ -9,22 +9,45 @@
         <br>
         <br>
 
+        <%if (onerow != undefined) { %>
+
+            <input type="hidden" class="hidden" id="bignum" value="<%=onerow[0]['bignum']%>">
+
                 <div class="row"> 
                     <div class="col-md-8">
-                        <input type="text" id = "title" class="form-control" placeholder="게시판 제목">
+                        <input type="text" id = "title" class="form-control" placeholder="게시판 제목" value="<%=onerow[0]['title']%>">
                     </div>
+                    
                     <div class="col-md-2">
-                            <label class="checkbox-inline"><input type="checkbox" value="" id="close">비공개</label>
+                            <%if (onerow[0]['close'] == 'true') { %>
+                                <label class="checkbox-inline"><input type="checkbox" value="" id="close" checked>비공개</label>
+                            <% } else{ %>
+                                <label class="checkbox-inline"><input type="checkbox" value="" id="close">비공개</label>
+                            <% } %>
                     </div><!-- /col-md-2 -->
+
+
                     <div class="col-md-2">
-                            <label class="checkbox-inline"><input type="checkbox" value="" id="album">앨범게시판</label>
+                            <%if (onerow[0]['album'] == 'true') { %>
+                                <label class="checkbox-inline"><input type="checkbox" value="" id="album" checked>앨범게시판</label>
+                            <% } else{ %>
+                                <label class="checkbox-inline"><input type="checkbox" value="" id="album">앨범게시판</label>
+                            <% } %>
+                            
                     </div><!-- /col-md-2 -->
                 </div><!-- row -->
             
             
             <br>
 
-            <div id="summernote">게시판 설명을 간단하게 적어주세요.</div>
+            <div id="summernote"></div>
+
+            <script>
+                    var htmlTag = "<%=onerow[0]['description']%>";  
+                    var changeToText = $("<div></div>").html(htmlTag).text();
+                    document.getElementById("summernote").innerHTML = changeToText;
+                    console.log(changeToText); 
+            </script> 
 
             <br>
             <br>
@@ -48,6 +71,7 @@
             });
             </script>
 
+<% } %> 
 
     </div>
 <div class="col-md-2"></div>
@@ -65,6 +89,7 @@
     //데이터 저장
     function saveContent() {
         //값 가져오기
+        var bignum = $("#bignum").val();    
         var title = $("#title").val();                                      //제목
         var close = $("#close").is(":checked");                             //비공개
         var album = $("#album").is(":checked");                             //앨범게시판 여부
@@ -74,10 +99,11 @@
         //유효성 검사가 완료되었으면
         if (chkresult) {
             $.ajax({
-                url: '/write/bigwritesave',
+                url: '/write/middlemodiy',
                 dataType: 'json',
                 type: 'post',
                 data: {
+                    bignum:bignum,
                     title: title,
                     close: close,
                     album:album,
