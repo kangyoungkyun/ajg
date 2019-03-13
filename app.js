@@ -94,14 +94,14 @@ var indexRouter = require('./routes/index');
 var writeRouter = require('./routes/write/write');    //글쓰기 /routes폴더 / write 폴더 / write.js
 var readRouter = require('./routes/read/read');       //글읽기 /routes폴더 / read 폴더 / read.js
 var loginRouter = require('./routes/login/login');        //글읽기 /routes폴더 / login 폴더 / login.js
-
+var adminRouter = require('./routes/admin/admin');        
 
 //session을 사용할 라우터 셋팅
 app.use(indexRouter);
 app.use(writeRouter);
 app.use(readRouter);
 app.use(loginRouter);
-
+app.use(adminRouter);
 
 //라우터 미들웨어를 설정한다.
 app.use('/', indexRouter);
@@ -109,7 +109,7 @@ app.use('/', indexRouter);
 app.use('/write', writeRouter);
 app.use('/read', readRouter);
 app.use('/login', loginRouter);
-
+app.use('/admin', adminRouter);
 
 
 // catch 404 and forward to error handler

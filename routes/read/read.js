@@ -10,8 +10,8 @@ router.get('/read/readbig', function (req, res, next) {
   var bignum = req.query.num;       //대분류 pk 값
   var album = req.query.album;       //대분류 pk 값
   
-  loger.info("앨범");
-  loger.info(album);
+  // loger.info("앨범");
+  // loger.info(album);
 
   var pagenum = req.query.pagenum;
   if (pagenum == undefined) {
@@ -21,7 +21,7 @@ router.get('/read/readbig', function (req, res, next) {
     var curPage = pagenum;
   }
 
-  loger.info("curPage : " + curPage);
+  //loger.info("curPage : " + curPage);
 
   //페이지당 게시물 수 : 한 페이지 당 10개 게시물
   var page_size = 10;
@@ -32,9 +32,15 @@ router.get('/read/readbig', function (req, res, next) {
   //전체 게시물의 숫자
   var totalPageCount = 0;
 
-  //소분류 글 조회 카운터!
+  //게시판 소개!
+  var bigQueryString = 'select * from bigTbl where bignum = ?';
+  client.query(bigQueryString, [bignum], function (error1, bigrows) {
+    if (error1) {
+      loger.info(error1 + "게시판 조회 조회 실패  - /read/readbig - /read.js");
+      return
+    }else{
+  //글 조회 카운터!
   var queryString = 'select count(*) as cnt from postTbl where bignum = ? ORDER BY postnum DESC';
-
   client.query(queryString, [bignum], function (error2, data) {
     if (error2) {
       loger.info(error2 + "소분류 글 조회 조회 실패  - /read/readbig - /read.js");
@@ -56,7 +62,6 @@ router.get('/read/readbig', function (req, res, next) {
     var startPage = ((curSet - 1) * 5) + 1                           // 현재 세트내 출력될 시작 페이지
     var endPage = (startPage + page_list_size) - 1;                   // 현재 세트내 출력될 마지막 페이지
     
-    
     //현재페이지가 0 보다 작으면
     if (curPage < 0) {
     no = 0
@@ -65,8 +70,7 @@ router.get('/read/readbig', function (req, res, next) {
     no = (curPage - 1) * 10
     }
     
-    loger.info('[0] curPage : ' + curPage + ' | [1] page_list_size : ' + page_list_size + ' | [2] page_size : ' + page_size + ' | [3] totalPage : ' + totalPage + ' | [4] totalSet : ' + totalSet + ' | [5] curSet : ' + curSet + ' | [6] startPage : ' + startPage + ' | [7] endPage : ' + endPage)
-    
+    //loger.info('[0] curPage : ' + curPage + ' | [1] page_list_size : ' + page_list_size + ' | [2] page_size : ' + page_size + ' | [3] totalPage : ' + totalPage + ' | [4] totalSet : ' + totalSet + ' | [5] curSet : ' + curSet + ' | [6] startPage : ' + startPage + ' | [7] endPage : ' + endPage)
     
     var pasing = {
       "curPage": curPage,
@@ -91,26 +95,29 @@ router.get('/read/readbig', function (req, res, next) {
           //게시판이 앨범게시판이 아닐경우
           if (album == 'false' || album == undefined || album == ''|| album == false) {
             res.render('read/readbig', {
+              bigrows:bigrows,
               postrows: postrows,
               pasing: pasing
             });
           } else {
             res.render('read/readgallery', {
+              bigrows:bigrows,
               postrows: postrows,
               pasing: pasing
             });
           }
 
-
         }else{
           //게시판이 앨범게시판이 아닐경우
           if (album == 'false' || album == undefined || album == ''|| album == false) {
             res.render('read/readbig', {
+              bigrows:bigrows,
               postrows: undefined,
               pasing: pasing
             });
           } else {
             res.render('read/readgallery', {
+              bigrows:bigrows,
               postrows: undefined,
               pasing: pasing
             });
@@ -119,13 +126,8 @@ router.get('/read/readbig', function (req, res, next) {
       }
     });
   });
-});
-
-/* 갤러리 보기 */
-router.get('/read/readgallery', function (req, res, next) {
-
-  res.render('read/readgallery');
-
+    }
+  });
 });
 
 /* 포스트 보기 */

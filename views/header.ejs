@@ -1,7 +1,7 @@
 <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="/">아중감 청년부</a>
+        <a class="navbar-brand" href="/">아중감 청년부 </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,26 +22,6 @@
               <% } %>
             <% } %>
 
-
-            <li class="nav-item">
-                <a class="nav-link" href="/write/bigwrite">게시판생성</a>
-            </li>
-              <li class="nav-item">
-                      <a class="nav-link" href="/write/write">글작성</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/read/readpost">글읽기</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" href="/read/readgallery">갤러리</a>
-              </li>
-              <li class="nav-item">
-                  <%if (whoami != undefined) { %>
-                  <a class="nav-link" href="/login/logout">로그아웃</a>
-                  <% } else{ %>
-                  <a class="nav-link" href="/login/login">로그인</a>
-                  <% } %>
-              </li>
           </ul>
         </div>
       </div>

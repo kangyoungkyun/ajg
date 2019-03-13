@@ -10,11 +10,15 @@
                     <div class="col-lg-1"></div>
                     <div class="col-lg-10">
         
-                        <!-- Blog Post -->
-        
-                        <!-- Title -->
-                        <h3>게시판</h3>
+                        <!-- Blog Post 게시판 제목-->
                         
+                        <%if (bigrows != undefined) { %>
+                        <!-- Title -->
+                        <h3>📌<%=bigrows[0]['title']%></h3>
+                        <p class="text-black-50">❇️<%=bigrows[0]['description']%></p>
+                        <br>
+                        <% } %>
+
                         <%if (postrows != undefined) { %>
                           <table class="table">
                             <thead>
