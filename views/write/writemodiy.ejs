@@ -84,6 +84,8 @@
                 
             });
             $("#summernote").summernote({
+                fontSize:50,
+                lineHeight:4,
                 placeholder: '공동체에 도움이 될 자료를 올려주세요.',
                 height: 500,
                 callbacks: {
@@ -99,6 +101,7 @@
                     }
                 }
             });
+
         });
 
 //사진 파일 저장
@@ -149,7 +152,7 @@ function saveContent() {
         success: function (data) {
             if (data['result'] == 'success') {
                 alert(data['tocken']);
-                location.reload();
+                location.href="/";
             } else if (data['result'] == 'fail') {
                 alert(data['tocken']);
                 return;

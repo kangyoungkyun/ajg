@@ -55,9 +55,30 @@ router.get('/', function (req, res, next) {
 
 
     });
-
-
 });
+
+
+/* 사역일정  */
+router.get('/calandar', function (req, res, next) {
+loger.info("사역일정");
+res.render('main/calandar');
+});
+/* 주보  */
+router.get('/joobo', function (req, res, next) {
+  loger.info("주보");
+  res.render('main/joobo');
+  });
+
+  /* 소개 */
+router.get('/intro', function (req, res, next) {
+  loger.info("소개");
+  res.render('main/intro');
+  });
+  /* mail  */
+router.get('/mail', function (req, res, next) {
+  res.render('main/mail');
+  });
+
 
 module.exports = router;
 loger.info("메모리 로딩 완료. - index.js");

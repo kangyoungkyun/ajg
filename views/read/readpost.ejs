@@ -14,12 +14,12 @@
                             <input type="hidden" class="hidden" id="postnum" value="<%=postrows[0]['postnum']%>">
                            <!-- Title -->
                            <p class="lead">
-                                <p><h3><%=postrows[0]['title']%></h3></p>
+                                <p><h3>🔅 <%=postrows[0]['title']%></h3></p>
                             </p>
                             <hr>
                            <!-- Author -->
                            <p class="lead">
-                               <p>작성자: <%=postrows[0]['nickname']%> | 날짜:<%=postrows[0]['regdate']  %> 
+                               <p> 👤<%=postrows[0]['nickname']%> | 🗓<%=postrows[0]['regdate']  %> 
 
                                 <!-- 권한 * auth 가 0 인 관라지만 수정가능하다!! -->
                                 <%if (whoami != undefined) { %>
@@ -34,13 +34,13 @@
 
 
                            <!-- Post Content -->
-                           <p class="lead" id="description"></p>
+                           <p class="lead note-editable" id="description"></p>
 
                            <script>
                                    var htmlTag = "<%=postrows[0]['description']%>";  
                                    var changeToText = $("<div></div>").html(htmlTag).text();
                                    document.getElementById("description").innerHTML = changeToText;
-                                   //console.log(changeToText); 
+                                  
                            </script>
 
 

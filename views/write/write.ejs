@@ -86,6 +86,7 @@
                 
             });
             $("#summernote").summernote({
+                
                 placeholder: '공동체에 도움이 될 자료를 올려주세요.',
                 height: 500,
                 callbacks: {
@@ -101,6 +102,10 @@
                     }
                 }
             });
+            $('#summernote').summernote('fontSize', 18);
+            $('#summernote').summernote('lineHeight', 3);
+
+
         });
 
 //사진 파일 저장
