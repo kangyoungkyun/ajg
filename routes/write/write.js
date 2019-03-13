@@ -259,7 +259,7 @@ router.get('/write/postmodiy', function (req, res, next) {
   var sql3 = 'select * from postTbl where postnum = ?';
   client.query(sql3, [postnum], function (err3, postrow, results) {
     if (err3) {
-      loger.error('post 조회 문장에 오류가 있습니다. - /write/writemodiy - /write.js');
+      loger.error('post 조회 문장에 오류가 있습니다. - /write/postmodiy - /write.js');
       loger.error(err3);
     } else {
 
@@ -274,7 +274,7 @@ router.get('/write/postmodiy', function (req, res, next) {
 
 /* 포스트 수정 액션 */
 router.post('/write/writemodiy',function (req, res, next) {
-  loger.info('포스트 수정 진입  - /write/middlemodiy - write.js');
+  loger.info('포스트 수정 진입  - /write/writemodiy - write.js');
  
   var postnum = req.body.postnum;
   var posttitle = req.body.posttitle;
@@ -294,6 +294,29 @@ router.post('/write/writemodiy',function (req, res, next) {
     }
   });
 });
+
+
+/* 포스트 삭제 액션 */
+router.post('/write/delete',function (req, res, next) {
+  loger.info('포스트 delete 진입  - /write/delete - write.js');
+ 
+  var postnum = req.body.postnum;
+
+  var deletesql = 'delete from postTbl where postnum= ?';
+  var params = [postnum];
+  client.query(deletesql, params, function (err, rows, fields) {
+    if (err) {
+      loger.error('post delete 쿼리에 오류가 있습니다. - /write/writemodiy - write.js');
+      loger.error(err);
+      res.send({ result: 'fail' , tocken:'삭제실패'});
+    } else {
+
+        res.send({ result: 'success' , tocken:'삭제성공'});
+        
+    }
+  });
+});
+
 
 module.exports = router;
 loger.info("메모리 로딩 완료. - write.js");

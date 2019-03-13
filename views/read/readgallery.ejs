@@ -12,7 +12,18 @@
                             <section class="gallery-block cards-gallery">
                                     <div class="container">
                                         <div class="heading">
-                                          <h2>아중감 청년부 모습</h2>
+                                        <%if (bigrows != undefined) { %>
+                                            <!-- 제목 -->
+                                            <h2>📌<%=bigrows[0]['title']%></h2>
+                                        <% } %>               
+                                            <!-- 권한 * auth 가 0 인 관라지만 수정가능하다!! -->
+                                                <div class="text-right">                                    
+                                                        <%if (whoami != undefined) { %>
+                                                            <%if (authnum == '0') { %>
+                                                                <div class="text-right"><a href="/write/middlemodiy?num=<%=bigrows[0]['bignum']%>" class="btn-sm btn-secondary">수정</a></div>
+                                                            <% } %>
+                                                        <% } %>
+                                                </div>
                                         </div>
                                         <div class="row">
                                                

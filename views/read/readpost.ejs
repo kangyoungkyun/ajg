@@ -11,7 +11,7 @@
         
                         <!-- Blog Post -->
                         <%if (postrows != undefined) { %>
-                            
+                            <input type="hidden" class="hidden" id="postnum" value="<%=postrows[0]['postnum']%>">
                            <!-- Title -->
                            <p class="lead">
                                 <p><h3><%=postrows[0]['title']%></h3></p>
@@ -20,11 +20,12 @@
                            <!-- Author -->
                            <p class="lead">
                                <p>작성자: <%=postrows[0]['nickname']%> | 날짜:<%=postrows[0]['regdate']  %> 
-                                
+
                                 <!-- 권한 * auth 가 0 인 관라지만 수정가능하다!! -->
                                 <%if (whoami != undefined) { %>
                                     <%if (authnum == '0') { %>
-                                        <a href="/write/postmodiy?postnum=<%=postrows[0]['postnum']%>" class="btn-sm btn-secondary">수정</a>
+                                        <a href="/write/postmodiy?postnum=<%=postrows[0]['postnum']%>" class="btn-sm btn-info">수정</a>
+                                        <a href="#" class="btn-sm btn-danger" id="delete">삭제</a>
                                     <% } %>
                                 <% } %>
                                </p>
@@ -66,5 +67,45 @@
 
     <% include ../footer %>
     <script>
+        $(document).ready(function () {
+            //저장버튼 클릭
+            $(document).on('click', '#delete', function () {
+
+                //값 가져오기
+                var postnum = $("#postnum").val();  
+                
+                var check = confirm('해당 글을 삭제하시겠습니까?');
+                if(check){
+
+                    $.ajax({
+                        url: '/write/delete',
+                        dataType: 'json',
+                        type: 'post',
+                        data: {
+                            postnum: postnum
+                        },
+                        success: function (data) {
+                            if (data['result'] == 'success') {
+                                alert(data['tocken']);
+                                window.history.go(-2);
+                            } else if (data['result'] == 'fail') {
+                                alert(data['tocken']);
+                                return;
+                            }
+                        },
+                        error: function (jqXHR, textStatus, err) {
+                            //show error message
+                            alert('죄송합니다. 작업중 오류가 발생했습니다.' + "상태 : " + textStatus + ', error : ' + err);
+                        }
+                    });
+
+
+                }else{
+                   return;
+                }
+                
+            });
+        });
+
     </script>
                  
