@@ -6,15 +6,16 @@
     <br><br><br>
             <div class="row">
                     
-                    <!-- Blog Post Content Column -->
+                    
                     <div class="col-lg-1"></div>
                     <div class="col-lg-10">
         
-                        <!-- Blog Post 게시판 제목-->
-
+                        <!-- 게시판 제목-->
                         <%if (bigrows != undefined) { %>
                         <!-- Title -->
                         <h3>📌<%=bigrows[0]['title']%></h3>
+
+                        <!-- 권한 * auth 가 0 인 관라지만 수정가능하다!! -->
                             <div class="text-right">                                    
                                 <%if (whoami != undefined) { %>
                                     <%if (authnum == '0') { %>

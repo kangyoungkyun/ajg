@@ -1,0 +1,165 @@
+
+    <% include ../head %>
+
+    <% include ../header %>
+    <div class="row">    
+            <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <br>
+        <br>
+        <br>
+        <%if (postrow != undefined) { %>
+            <input type="hidden" class="hidden" id="postnum" value="<%=postrow[0]['postnum']%>">
+       
+                <div class="row"> 
+
+                    <div class="col-md-10">
+                    <input type="text" id = "posttitle" class="form-control" aria-label="제목" placeholder="제목" value="<%=postrow[0]['title']%>">
+                    </div>
+
+                    <div class="col-md-2">
+                            <%if (postrow[0]['notice'] == 'true') { %>
+                                <label class="checkbox-inline"><input type="checkbox" value="" id = "notice" checked>공지글</label>
+                            <% } else{ %>
+                                <label class="checkbox-inline"><input type="checkbox" value="" id = "notice">공지글</label>
+                            <% } %>
+                           
+                    </div><!-- /col-md-2 -->
+
+
+
+                </div><!-- row -->
+            
+            
+            <br>
+
+            <div id="summernote"></div>
+            <script>
+                    var htmlTag = "<%=postrow[0]['description']%>";  
+                    var changeToText = $("<div></div>").html(htmlTag).text();
+                    document.getElementById("summernote").innerHTML = changeToText;
+                    console.log(changeToText); 
+            </script> 
+
+            <br>
+            <br>
+
+
+            <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"><button type="button" class="btn btn-success btn-lg text-center" id = "saveBtn">수정</button></div>
+                    <div class="col-md-3"></div>
+            </div>
+            <br><br>
+
+        <% } %>    
+
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
+    <% include ../footer %>
+ 
+    <script>
+        $(document).ready(function () {
+            //저장버튼 클릭
+            $(document).on('click', '#saveBtn', function () {
+
+                //값 가져오기
+                var postnum = $("#postnum").val();   
+                var posttitle = $("#posttitle").val();                                              //포스트 제목
+                var summernoteContent = $('#summernote').summernote('code');                        //썸머노트
+
+                if (posttitle == null || posttitle == undefined || posttitle == ''){
+                    alert('글제목을 작성해주세요.');
+                    return;
+                }else if (summernoteContent == null || summernoteContent == undefined || summernoteContent == ''){
+                    alert('본문을 작성해주세요.');
+                    return;
+                }else{
+                    //유효성 검사후 저장
+                    saveContent();
+                }
+                
+            });
+            $("#summernote").summernote({
+                placeholder: '공동체에 도움이 될 자료를 올려주세요.',
+                height: 500,
+                callbacks: {
+                    onImageUpload: function (files, editor, welEditable) {
+                        for (var i = files.length - 1; i >= 0; i--) {
+                            sendFile(files[i], this);
+                        }
+                    },
+
+                    onMediaDelete: function (target) {
+                        //alert(target[0].src) 
+                        deleteFile(target[0].src);
+                    }
+                }
+            });
+        });
+
+//사진 파일 저장
+function sendFile(file, el) {
+    var form_data = new FormData();
+    form_data.append('file', file);
+    $.ajax({
+        data: form_data,
+        type: "POST",
+        url: '/write/writepostimagesave',
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (url) {
+            $('#summernote').summernote('editor.insertImage', url['url']);
+        }
+    });
+}
+//사진 파일 삭제
+function deleteFile(src) {
+    $.ajax({
+        data: { src: src },
+        type: "POST",
+        url: '/write/writepostimagedelete',
+        cache: false,
+        success: function (resp) {
+        //console.log(resp);
+        }
+    });
+}
+
+//수정저장
+function saveContent() {
+    var postnum = $("#postnum").val();   
+    var posttitle = $("#posttitle").val();                                  //포스트 제목
+    var notice = $("#notice").is(":checked");                               //공지 여부
+    var summernoteContent = $('#summernote').summernote('code');            //썸머노트
+    $.ajax({
+        url: '/write/writemodiy',
+        dataType: 'json',
+        type: 'post',
+        data: {
+            postnum:postnum,
+            posttitle: posttitle,
+            notice: notice,
+            summernoteContent: summernoteContent
+        },
+        success: function (data) {
+            if (data['result'] == 'success') {
+                alert(data['tocken']);
+                location.reload();
+            } else if (data['result'] == 'fail') {
+                alert(data['tocken']);
+                return;
+            }
+        },
+        error: function (jqXHR, textStatus, err) {
+            //show error message
+            alert('죄송합니다. 작업중 오류가 발생했습니다.' + "상태 : " + textStatus + ', error : ' + err);
+        }
+    });
+}
+    </script>
+                 

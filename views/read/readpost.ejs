@@ -19,7 +19,15 @@
                             <hr>
                            <!-- Author -->
                            <p class="lead">
-                               <p>작성자: <%=postrows[0]['nickname']%> | 날짜:<%=postrows[0]['regdate']%> </p>
+                               <p>작성자: <%=postrows[0]['nickname']%> | 날짜:<%=postrows[0]['regdate']  %> 
+                                
+                                <!-- 권한 * auth 가 0 인 관라지만 수정가능하다!! -->
+                                <%if (whoami != undefined) { %>
+                                    <%if (authnum == '0') { %>
+                                        <a href="/write/postmodiy?postnum=<%=postrows[0]['postnum']%>" class="btn-sm btn-secondary">수정</a>
+                                    <% } %>
+                                <% } %>
+                               </p>
                            </p>
                            <hr>
 
