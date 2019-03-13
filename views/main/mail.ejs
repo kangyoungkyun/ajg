@@ -4,23 +4,87 @@
     <% include ../header %>
 
     <br><br><br>
+    <div class="container">
             <div class="row">
-                    
-                    
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-10">
+                <div class="col-lg-12 text-center">
+                    <h1 class="mt-5">💌목사님께</h1>
+                    <p class="lead">고민과 의견을 나누어요.</p>
+        
+                   <ul class="list-unstyled">
+                    <p>❗️메일은 익명으로 전달이 됩니다. 답장을 받고 싶으시면 내용란에 이름 또는 받으실 email 주소를 기입해주세요.</p>
+                    <form>
 
-                        <div>메일</div>
-                    </div>
-                    <div class="col-lg-1"></div>
+                        <div class="form-group">
+                            <input type="text" class="form-control text-left" id="title" name="title" placeholder="제목">
+                        </div>
 
+ 
+                      <div class="form-group">
+                        <textarea class="form-control" rows="5" id="comment" name="text" placeholder="내용:고민,상담,기도부탁,감사인사 이외의 불건전한 내용은 삼가하주세요:)"></textarea>
+                      </div>
+
+                      <button type="button" class="btn btn-success" id = "saveBtn">발송</button>
+                    </form>
+                    </ul>
+    
+  
+    
                 </div>
-                <!-- /.row -->
+            </div>
+        </div>
 
 
     <% include ../footer %>
  
     <script>
+        $(document).ready(function () {
+            //저장버튼 클릭
+            $(document).on('click', '#saveBtn', function () {
 
+                //값 가져오기
+                var title = $("#title").val();
+                var comment = $("#comment").val();                                      
+                           
+                if (title == null || title == undefined || title == ''){
+                    alert('제목을 작성해주세요.');
+                    return;
+                }else if (comment == null || comment == undefined || comment == ''){
+                    alert('내용을 작성해주세요.');
+                    return;
+                }else{
+                    //유효성 검사후 저장
+                    saveContent();
+                }
+                
+            });
+        });
+
+            //발송
+            function saveContent() {
+                var title = $("#title").val();
+                var email = $("#email").val();
+                var comment = $("#comment").val();
+                $.ajax({
+                    url: '/write/sendmail',
+                    dataType: 'json',
+                    type: 'post',
+                    data: {
+                        title: title,
+                        comment: comment
+                    },
+                    success: function (data) {
+                        if (data['result'] == 'success') {
+                            alert(data['tocken']);
+                            location.reload();
+                        } else if (data['result'] == 'fail') {
+                            alert(data['tocken']);
+                            return;
+                        }
+                    },
+                    error: function (jqXHR, textStatus, err) {
+                        //show error message
+                        alert('죄송합니다. 작업중 오류가 발생했습니다.' + "상태 : " + textStatus + ', error : ' + err);
+                    }
+                });
+            }      
     </script>
-                 

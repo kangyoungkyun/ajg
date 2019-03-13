@@ -3,7 +3,9 @@ var router = express.Router();
 var loger = require('../../logmodule.js');                  //로그모듈
 var multer = require('multer')                          //파일관련 모듈
 var client = require('../../config/mysqlconfig.js');        //mysql 모듈
-var fs = require('fs'); 
+var fs = require('fs');
+var nodemailer = require('nodemailer');                     //메일 전송 모듈
+var smtpTransport = require('nodemailer-smtp-transport');   //smtp 서버를 사용하기 위한 모듈. 
 loger.info("메모리 로딩 시작. - write.js");
 
 /* 대분류 - 게시판 생성 페이지 */
@@ -316,6 +318,57 @@ router.post('/write/delete',function (req, res, next) {
     }
   });
 });
+
+
+/* 이메일 발송 */
+router.post('/write/sendmail',function (req, res, next) {
+  loger.info('sendmail  - /write/sendmail - write.js');
+
+  var title = req.body.title;
+  var comment = req.body.comment;
+
+  if(sendAuthFunc(title,comment)){
+    res.send({ result: 'success' , tocken:'발송성공'});
+  }else{
+    res.send({ result: 'success' , tocken:'발송실패'});
+  }
+
+});
+
+//이메일 발송함수
+function sendAuthFunc(title,comment) {
+  var transporter = nodemailer.createTransport(smtpTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    auth: {
+      user: 'thanksman1211@gmail.com',
+      pass: 'project100$100'
+    }
+  }));
+
+  var mailOptions = {
+    from: 'thanksman1211@gmail.com',
+    to: 'parkjhyun79@hanmail.net',
+    subject: title,
+    html: '<p>'+ comment +'</p>'
+          
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      loger.error('메일 전송중 오류가 발생했습니다. login.js - sendAuthFunc()');
+      loger.error(error);
+      return false;
+    } else {
+      loger.info("인증 메일이 발송되었습니다.");
+      loger.info('Email 발송 : ' + info.response);
+      
+      return true;
+    }
+  });
+
+  return true;
+}
 
 
 module.exports = router;
