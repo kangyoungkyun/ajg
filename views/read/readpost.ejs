@@ -87,7 +87,7 @@
                         success: function (data) {
                             if (data['result'] == 'success') {
                                 alert(data['tocken']);
-                                window.history.go(-2);
+                                window.location.href= '/';
                             } else if (data['result'] == 'fail') {
                                 alert(data['tocken']);
                                 return;
