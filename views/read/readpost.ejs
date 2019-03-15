@@ -12,10 +12,17 @@
                         <!-- Blog Post -->
                         <%if (postrows != undefined) { %>
                             <input type="hidden" class="hidden" id="postnum" value="<%=postrows[0]['postnum']%>">
-                           <!-- Title -->
+                           
+                            <!-- Title 공지일 경우 구분해주기-->
                            <p class="lead">
-                                <p><h3>🔅 <%=postrows[0]['title']%></h3></p>
+                                
+                                <%if (postrows[0]['notice'] == 'true'){ %>
+                                    <p><h3>🔅[공지] <%=postrows[0]['title']%></h3></p>
+                                <% } else { %>
+                                    <p><h3>🔅<%=postrows[0]['title']%></h3></p>
+                                <% } %>
                             </p>
+
                             <hr>
                            <!-- Author -->
                            <p class="lead">

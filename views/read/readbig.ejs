@@ -61,25 +61,35 @@
                                     var dateResult = result.substring(2,10);
                                     document.getElementById("regdate<%=ii%>").innerHTML = dateResult;
                                    
+                                   
                                     var title = "<%=postrows[ii]['title']%>"; 
 
-                                    //제목에 5글자 보다 크면
-                                    if(title.length > 15){
-                                        var titleResult = title.substring(0,15);
-                                        titleResult = titleResult+ '..'
-                                        document.getElementById("title<%=ii%>").innerHTML = titleResult;
-                                                                  
-                                    }else{
-                                        document.getElementById("title<%=ii%>").innerHTML = title;
-                                    }
-
                                     //공지사항일때만 분혼색 꽃그림
-                                    var substring = "공지";
-                                    var titlenum = title.indexOf(substring); 
-                                    if(titlenum == 1){
+                                    var notice = "<%=postrows[ii]['notice']%>"; 
+                                    if(notice == 'true'){
                                         document.getElementById("tdnum<%=ii%>").innerHTML = '🌸';
-                                    }else if (titlenum == -1){
+
+                                            //제목에 5글자 보다 크면
+                                            if(title.length > 15){
+                                                var titleResult = title.substring(0,15);
+                                                titleResult = titleResult+ '..'
+                                                document.getElementById("title<%=ii%>").innerHTML = "[공지] "+titleResult;
+                                                                        
+                                            }else{
+                                                document.getElementById("title<%=ii%>").innerHTML = "[공지] "+title;
+                                            }
+                                    //일반글일때        
+                                    }else if (notice == 'false'){
                                         document.getElementById("tdnum<%=ii%>").innerHTML = '🍀';
+                                        //제목에 5글자 보다 크면
+                                        if (title.length > 15) {
+                                            var titleResult = title.substring(0, 15);
+                                            titleResult = titleResult + '..'
+                                            document.getElementById("title<%=ii%>").innerHTML = titleResult;
+
+                                        } else {
+                                            document.getElementById("title<%=ii%>").innerHTML = title;
+                                        }
                                     }
 
                             </script>
