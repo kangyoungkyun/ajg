@@ -4,7 +4,7 @@ var mysql = require('mysql');
 
 
 
-//mysql 커넥터
+// 로컬 mysql 커넥터
 var client = mysql.createConnection({
   host: "localhost",
   user:'root',
@@ -14,12 +14,12 @@ var client = mysql.createConnection({
 });
 
 
-//mysql 커넥터
+//호스팅 mysql 커넥터
 // var client = mysql.createConnection({
-//   host: "115.71.239.29",
-//   user:'kk12111',
+//   host: "115.71.238.146",
+//   user:'ajg',
 //   password:'1111',
-//   database:'mydb',
+//   database:'mydb3',
 //   dateStrings: 'date'
 // });
 

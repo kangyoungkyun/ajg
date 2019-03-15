@@ -42,7 +42,10 @@
                                 <tbody>
                           <% for (var ii = 0; ii < postrows.length; ii++) {  %>
                             <tr>
-                                <td style="font-size:88%;"><%=postrows[ii]['postnum']%></td>
+
+
+
+                                <td id = "tdnum<%=ii%>" style="font-size:88%;"></td>
                                 <td style="font-size:88%;"> <a id='title<%=ii%>' href="/read/readpost?postnum=<%=postrows[ii]['postnum']%>"></a></td>
                                 <td style="font-size:88%;"><%=postrows[ii]['author']%></td>
                                 <td style="font-size:88%;" id='regdate<%=ii%>'></td>
@@ -68,6 +71,15 @@
                                                                   
                                     }else{
                                         document.getElementById("title<%=ii%>").innerHTML = title;
+                                    }
+
+                                    //공지사항일때만 분혼색 꽃그림
+                                    var substring = "공지";
+                                    var titlenum = title.indexOf(substring); 
+                                    if(titlenum == 1){
+                                        document.getElementById("tdnum<%=ii%>").innerHTML = '🌸';
+                                    }else if (titlenum == -1){
+                                        document.getElementById("tdnum<%=ii%>").innerHTML = '🍀';
                                     }
 
                             </script>

@@ -84,13 +84,27 @@ router.get('/read/readbig', function (req, res, next) {
       };
 
     //글 조회
-    var sql = 'select * from postTbl where  bignum = ? ORDER BY postnum DESC limit ?,?';
-    client.query(sql, [bignum, no, page_size], function (err4, postrows, results) {
+    //
+/* 
+(select * from postTbl where  bignum = '1' and notice = 'true' ORDER BY postnum DESC limit 0,3)
+
+union all
+
+(select * from postTbl where  bignum = '1' and notice = 'false'  ORDER BY postnum DESC limit 0,10)
+*/
+
+    var sql = '(select * from postTbl where  bignum = ? and notice = "true" ORDER BY postnum DESC limit 0,3) ' + 
+              'union all ' +
+              '(select * from postTbl where  bignum = ? and notice = "false" ORDER BY postnum DESC limit ?,?)';
+    client.query(sql, [bignum,bignum, no, page_size], function (err4, postrows, results) {
       if (err4) {
         loger.error('글 조회 문장에 오류가 있습니다. - /read/readbig - /read.js');
         loger.error(err4);
       } else {
         
+        //loger.info("postrows ㄱㅐ수");
+        //loger.info(postrows.length);
+
         if(postrows.length > 0){
           //게시판이 앨범게시판이 아닐경우
           if (album == 'false' || album == undefined || album == ''|| album == false) {

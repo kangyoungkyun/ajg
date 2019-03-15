@@ -11,6 +11,16 @@ var loger = require('./logmodule.js');            //로그모듈
 var app = express(); 
 
 
+
+// var options = {                                         //session을 mysql db에 저장시키기위한 옵션
+//   host	: '115.71.238.146',
+//   port	: 3306,
+//   user	: 'ajg',
+//   password: '1111',		                              //데이터베이스 접근 비밀번호
+//   database: 'mydb3'		                                  //데이터베이스의 이름
+//   };
+
+//로컬
 var options = {                                         //session을 mysql db에 저장시키기위한 옵션
   host	: 'localhost',
   port	: 3306,
@@ -57,9 +67,9 @@ function callMenu(){
       loger.error(err);
       return;
     } else {
-      loger.info("메뉴셋팅~!");
+      //loger.info("메뉴셋팅~!");
       menus = selectrows;
-      loger.info("메뉴셋팅~ 완료");
+      //loger.info("메뉴셋팅~ 완료");
     }
   }); 
 }
@@ -70,12 +80,12 @@ app.use(function(req, res, next) {
   loger.info("공통페이지 진입 - app.js");
     if (req.session.nickname) {
       callMenu();
-      loger.info("세션세팅");
+      //loger.info("세션세팅");
       res.locals.email = req.session.authId;
       res.locals.whoami = req.session.nickname;
       res.locals.menus = menus;
       res.locals.authnum = req.session.authnum; 
-      loger.info(res.locals.authnum);
+      //loger.info(res.locals.authnum);
 
     } else {
       callMenu();
